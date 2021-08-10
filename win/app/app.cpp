@@ -8,6 +8,8 @@
 #include "EGL/egl.h"
 #include "GLES2/gl2.h"
 
+#include "soccer/world.h"
+
 #define MAX_LOADSTRING 100
 
 // Global Variables:
@@ -90,6 +92,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 EGLDisplay display;
 EGLContext context;
 EGLSurface surface;
+World world;
 
 //
 //   FUNCTION: InitInstance(HINSTANCE, int)
@@ -178,8 +181,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: Add any drawing code that uses hdc here...
-            glClearColor(1, 0, 0, 0);
+            glClearColor(0, 0, 0, 0);
             glClear(GL_COLOR_BUFFER_BIT);
+
+            world.draw();
+
             glFlush();
             eglSwapBuffers(display, surface);
 
