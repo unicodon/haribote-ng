@@ -27,7 +27,7 @@
     <ClInclude Include="..\..\src\haribote\math\MatrixUtils.h">
       <Filter>math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\haribote\renderer\Camera.h">
+    <ClInclude Include="..\..\src\haribote\objects\Camera.h">
       <Filter>objects</Filter>
     </ClInclude>
   </ItemGroup>
@@ -44,7 +44,7 @@
     <ClCompile Include="..\..\src\haribote\soccer\Filed.cpp">
       <Filter>soccer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\haribote\renderer\Camera.cpp">
+    <ClCompile Include="..\..\src\haribote\objects\Camera.cpp">
       <Filter>objects</Filter>
     </ClCompile>
   </ItemGroup>

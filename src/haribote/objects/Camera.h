@@ -13,5 +13,8 @@ protected:
 	GLfloat fov;//視野角
 	GLfloat aspect;//アスペクト比
 public:
+	Matrix<float> view() const;
+	Matrix<float> projection() const;
+
 	Camera();
 };

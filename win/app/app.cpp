@@ -127,6 +127,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    attr.push_back(8);
    attr.push_back(EGL_BLUE_SIZE);
    attr.push_back(8);
+   attr.push_back(EGL_RENDERABLE_TYPE);
+   attr.push_back(EGL_OPENGL_ES2_BIT);
    attr.push_back(EGL_SURFACE_TYPE);
    attr.push_back(EGL_WINDOW_BIT);
    attr.push_back(EGL_NONE);
@@ -136,8 +138,15 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    eglChooseConfig(display, attr.data(), &config, 1, &numConfig);
 
    surface = eglCreateWindowSurface(display, config, hWnd, NULL);
-   context = eglCreateContext(display, config, NULL, NULL);
+
+   attr.clear();
+   attr.push_back(EGL_CONTEXT_CLIENT_VERSION);
+   attr.push_back(2);
+   attr.push_back(EGL_NONE);
+   context = eglCreateContext(display, config, EGL_NO_CONTEXT, attr.data());
    eglMakeCurrent(display, surface, surface, context);
+
+   SetTimer(hWnd, 1, 20, nullptr);
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
@@ -181,6 +190,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
             // TODO: Add any drawing code that uses hdc here...
+
+            EndPaint(hWnd, &ps);
+        }
+        break;
+    case WM_TIMER:
+        {
             glClearColor(0, 0, 0, 0);
             glClear(GL_COLOR_BUFFER_BIT);
 
@@ -188,8 +203,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             glFlush();
             eglSwapBuffers(display, surface);
-
-            EndPaint(hWnd, &ps);
         }
         break;
     case WM_DESTROY:

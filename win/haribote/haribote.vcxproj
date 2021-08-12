@@ -154,14 +154,14 @@
     <ClInclude Include="..\..\src\haribote\math\MatrixUtils.h" />
     <ClInclude Include="..\..\src\haribote\objects\Body.h" />
     <ClInclude Include="..\..\src\haribote\objects\Box.h" />
-    <ClInclude Include="..\..\src\haribote\renderer\Camera.h" />
+    <ClInclude Include="..\..\src\haribote\objects\Camera.h" />
     <ClInclude Include="..\..\src\haribote\soccer\Field.h" />
     <ClInclude Include="..\..\src\haribote\soccer\World.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\haribote\objects\Body.cpp" />
     <ClCompile Include="..\..\src\haribote\objects\Box.cpp" />
-    <ClCompile Include="..\..\src\haribote\renderer\Camera.cpp" />
+    <ClCompile Include="..\..\src\haribote\objects\Camera.cpp" />
     <ClCompile Include="..\..\src\haribote\soccer\Filed.cpp" />
     <ClCompile Include="..\..\src\haribote\soccer\World.cpp" />
   </ItemGroup>
