@@ -3,7 +3,7 @@
 #include <ode/ode.h>
 #include <ode/odecpp.h>
 #include <memory>
-#include "../objects/Box.h"
+#include "../geom/Box.h"
 class Camera;
 
 class Field {
@@ -11,10 +11,13 @@ public:
 	dWorld m_world;
 
 public:
-	Field();
+	Field(dWorldID, dSpaceID);
+	~Field();
 
 	void draw(Camera&);
 
 private:
-	std::unique_ptr<Box> m_ground;
+	dHashSpace m_space;
+	dPlane m_ground;
+	std::unique_ptr<Box> m_box;
 };

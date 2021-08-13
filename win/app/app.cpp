@@ -5,6 +5,7 @@
 #include "app.h"
 
 #include <vector>
+#include <memory>
 #include "EGL/egl.h"
 #include "GLES2/gl2.h"
 
@@ -89,10 +90,88 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     return RegisterClassExW(&wcex);
 }
 
-EGLDisplay display;
-EGLContext context;
-EGLSurface surface;
-World world;
+class Display {
+public:
+    EGLDisplay m_display = EGL_NO_DISPLAY;
+    Display()
+    {
+        m_display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+        EGLint major, minor;
+        eglInitialize(m_display, &major, &minor);
+    }
+
+    ~Display()
+    {
+        eglTerminate(m_display);
+    }
+};
+
+EGLDisplay display()
+{
+    static Display g_disp;
+    return g_disp.m_display;
+}
+
+EGLConfig config()
+{
+    std::vector<EGLint> attr;
+    attr.push_back(EGL_RED_SIZE);
+    attr.push_back(8);
+    attr.push_back(EGL_GREEN_SIZE);
+    attr.push_back(8);
+    attr.push_back(EGL_BLUE_SIZE);
+    attr.push_back(8);
+    attr.push_back(EGL_RENDERABLE_TYPE);
+    attr.push_back(EGL_OPENGL_ES2_BIT);
+    attr.push_back(EGL_SURFACE_TYPE);
+    attr.push_back(EGL_WINDOW_BIT);
+    attr.push_back(EGL_NONE);
+
+    EGLConfig config;
+    EGLint numConfig;
+    eglChooseConfig(display(), attr.data(), &config, 1, &numConfig);
+    return config;
+}
+
+class WindowSurface {
+public:
+    EGLSurface m_surface = EGL_NO_SURFACE;
+
+    WindowSurface(HWND hWnd)
+    {
+        m_surface = eglCreateWindowSurface(display(), config(), hWnd, NULL);
+    }
+
+    ~WindowSurface()
+    {
+        eglDestroySurface(display(), m_surface);
+    }
+};
+
+std::unique_ptr<WindowSurface> g_surface;
+
+class Context {
+public:
+    EGLContext m_context;
+    Context()
+    {
+        std::vector<EGLint> attr;
+        attr.push_back(EGL_CONTEXT_CLIENT_VERSION);
+        attr.push_back(2);
+        attr.push_back(EGL_NONE);
+        m_context = eglCreateContext(display(), config(), EGL_NO_CONTEXT, attr.data());
+    }
+
+    ~Context()
+    {
+        eglDestroyContext(display(), m_context);
+    }
+};
+
+std::unique_ptr<Context> g_context;
+
+std::unique_ptr<World> g_world;
+
 
 //
 //   FUNCTION: InitInstance(HINSTANCE, int)
@@ -116,35 +195,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
       return FALSE;
    }
 
-   display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-   EGLint major, minor;
-   eglInitialize(display, &major, &minor);
+   g_world = World::create();
 
-   std::vector<EGLint> attr;
-   attr.push_back(EGL_RED_SIZE);
-   attr.push_back(8);
-   attr.push_back(EGL_GREEN_SIZE);
-   attr.push_back(8);
-   attr.push_back(EGL_BLUE_SIZE);
-   attr.push_back(8);
-   attr.push_back(EGL_RENDERABLE_TYPE);
-   attr.push_back(EGL_OPENGL_ES2_BIT);
-   attr.push_back(EGL_SURFACE_TYPE);
-   attr.push_back(EGL_WINDOW_BIT);
-   attr.push_back(EGL_NONE);
+   g_surface = std::make_unique<WindowSurface>(hWnd);
+   g_context = std::make_unique<Context>();
 
-   EGLConfig config;
-   EGLint numConfig;
-   eglChooseConfig(display, attr.data(), &config, 1, &numConfig);
-
-   surface = eglCreateWindowSurface(display, config, hWnd, NULL);
-
-   attr.clear();
-   attr.push_back(EGL_CONTEXT_CLIENT_VERSION);
-   attr.push_back(2);
-   attr.push_back(EGL_NONE);
-   context = eglCreateContext(display, config, EGL_NO_CONTEXT, attr.data());
-   eglMakeCurrent(display, surface, surface, context);
+   eglMakeCurrent(display(), g_surface->m_surface, g_surface->m_surface, g_context->m_context);
 
    SetTimer(hWnd, 1, 20, nullptr);
 
@@ -194,18 +250,27 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             EndPaint(hWnd, &ps);
         }
         break;
+    case WM_SIZE:
+        {
+           //g_surface = std::make_unique<WindowSurface>(hWnd);
+
+           //eglMakeCurrent(display(), g_surface->m_surface, g_surface->m_surface, g_context->m_context);
+        }
+        break;
     case WM_TIMER:
         {
             glClearColor(0, 0, 0, 0);
             glClear(GL_COLOR_BUFFER_BIT);
 
-            world.draw();
+            if (g_world)
+                g_world->draw();
 
             glFlush();
-            eglSwapBuffers(display, surface);
+            eglSwapBuffers(display(), g_surface->m_surface);
         }
         break;
     case WM_DESTROY:
+        g_world.reset();
         PostQuitMessage(0);
         break;
     default:

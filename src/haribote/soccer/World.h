@@ -1,8 +1,13 @@
 #pragma once
 
-class Camera;
+#include <memory>
 
 class World {
 public:
-	static void draw();
+	World() = default;
+	virtual ~World() = default;
+
+	virtual void draw() = 0;
+	
+	static std::unique_ptr<World> create();
 };

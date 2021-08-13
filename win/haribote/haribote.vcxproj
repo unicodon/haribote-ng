@@ -151,18 +151,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\haribote\geom\Body.h" />
+    <ClInclude Include="..\..\src\haribote\geom\Box.h" />
+    <ClInclude Include="..\..\src\haribote\geom\Camera.h" />
+    <ClInclude Include="..\..\src\haribote\geom\GraphicsUtils.h" />
+    <ClInclude Include="..\..\src\haribote\geom\ODEUtils.h" />
     <ClInclude Include="..\..\src\haribote\math\MatrixUtils.h" />
-    <ClInclude Include="..\..\src\haribote\objects\Body.h" />
-    <ClInclude Include="..\..\src\haribote\objects\Box.h" />
-    <ClInclude Include="..\..\src\haribote\objects\Camera.h" />
+    <ClInclude Include="..\..\src\haribote\soccer\Ball.h" />
     <ClInclude Include="..\..\src\haribote\soccer\Field.h" />
     <ClInclude Include="..\..\src\haribote\soccer\World.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\haribote\objects\Body.cpp" />
-    <ClCompile Include="..\..\src\haribote\objects\Box.cpp" />
-    <ClCompile Include="..\..\src\haribote\objects\Camera.cpp" />
-    <ClCompile Include="..\..\src\haribote\soccer\Filed.cpp" />
+    <ClCompile Include="..\..\src\haribote\geom\Body.cpp" />
+    <ClCompile Include="..\..\src\haribote\geom\Box.cpp" />
+    <ClCompile Include="..\..\src\haribote\geom\Camera.cpp" />
+    <ClCompile Include="..\..\src\haribote\geom\GraphicsUtils.cpp" />
+    <ClCompile Include="..\..\src\haribote\geom\ODEUtils.cpp" />
+    <ClCompile Include="..\..\src\haribote\soccer\Ball.cpp" />
+    <ClCompile Include="..\..\src\haribote\soccer\Field.cpp" />
     <ClCompile Include="..\..\src\haribote\soccer\World.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

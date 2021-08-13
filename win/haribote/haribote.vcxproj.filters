@@ -1,23 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="objects">
-      <UniqueIdentifier>{0db21104-0488-4c01-91aa-42204d6c1aed}</UniqueIdentifier>
-    </Filter>
     <Filter Include="soccer">
       <UniqueIdentifier>{693558d6-16b4-4bcb-be0d-661cf9a1e4cd}</UniqueIdentifier>
     </Filter>
     <Filter Include="math">
       <UniqueIdentifier>{186106c9-edc2-4a48-a953-ee87996af03a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="geom">
+      <UniqueIdentifier>{f0436eba-46de-46f5-8100-7586b672bb75}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\haribote\objects\Body.h">
-      <Filter>objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\haribote\objects\Box.h">
-      <Filter>objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\haribote\soccer\World.h">
       <Filter>soccer</Filter>
     </ClInclude>
@@ -27,25 +21,49 @@
     <ClInclude Include="..\..\src\haribote\math\MatrixUtils.h">
       <Filter>math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\haribote\objects\Camera.h">
-      <Filter>objects</Filter>
+    <ClInclude Include="..\..\src\haribote\soccer\Ball.h">
+      <Filter>soccer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\haribote\geom\Body.h">
+      <Filter>geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\haribote\geom\Box.h">
+      <Filter>geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\haribote\geom\Camera.h">
+      <Filter>geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\haribote\geom\GraphicsUtils.h">
+      <Filter>geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\haribote\geom\ODEUtils.h">
+      <Filter>geom</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\haribote\objects\Body.cpp">
-      <Filter>objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\haribote\objects\Box.cpp">
-      <Filter>objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\haribote\soccer\World.cpp">
       <Filter>soccer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\haribote\soccer\Filed.cpp">
+    <ClCompile Include="..\..\src\haribote\soccer\Field.cpp">
       <Filter>soccer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\haribote\objects\Camera.cpp">
-      <Filter>objects</Filter>
+    <ClCompile Include="..\..\src\haribote\soccer\Ball.cpp">
+      <Filter>soccer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\haribote\geom\Body.cpp">
+      <Filter>geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\haribote\geom\Box.cpp">
+      <Filter>geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\haribote\geom\Camera.cpp">
+      <Filter>geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\haribote\geom\GraphicsUtils.cpp">
+      <Filter>geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\haribote\geom\ODEUtils.cpp">
+      <Filter>geom</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
