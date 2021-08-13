@@ -7,14 +7,14 @@ Camera::Camera()
 {
 	position[0] = position[1] = position[2] = 0;
 
-	m_tilt = -45 * M_PI / 180;
+	m_tilt = -25 * M_PI / 180;
 	m_pan = 0;
 	m_roll = 0;
 
 	zNear = 0.0100;
 	zFar = 40.000;
 	fov = 30;
-	aspect = 1.8;
+	aspect = 1280.0/720.0;
 
 	position[0] = 0.200;
 	position[1] = -1.500;

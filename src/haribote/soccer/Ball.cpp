@@ -4,7 +4,7 @@
 #include "../geom/ODEUtils.h"
 
 const dReal BallRadius = 0.1;
-const dReal BallWeight = 0.1;
+const dReal BallWeight = 0.01;
 
 Ball::Ball(dWorldID world, dSpaceID space)
 	: m_geom(space, BallRadius)
@@ -14,7 +14,6 @@ Ball::Ball(dWorldID world, dSpaceID space)
 	mass.setSphereTotal(BallWeight, BallRadius);
 	m_body.setMass(mass);
 	m_geom.setBody(m_body);
-	m_body.setLinearVel(0.1, 0, 0);
 }
 
 Ball::~Ball()

@@ -4,6 +4,7 @@
 #include "GLES2/gl2.h"
 #include <mutex>
 #include "GraphicsUtils.h"
+#include "ODEUtils.h"
 
 void Box::drawWireframe(Camera& camera)
 {
@@ -12,16 +13,10 @@ void Box::drawWireframe(Camera& camera)
 
 	Matrix mat;
 	if (m_body) {
-		auto pos = m_body->getPosition();
-		for (int i = 0; i < 3; i++) {
-			mat[3][i] = pos[i];
-		}
+		mat = getRotPos(*m_body);
 	}
 	else {
-		auto pos = m_geom.getPosition();
-		for (int i = 0; i < 3; i++) {
-			mat[3][i] = pos[i];
-		}
+		mat = getRotPos(m_geom);
 	}
 
 	drawAxes(camera, mat);

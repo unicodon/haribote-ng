@@ -171,18 +171,18 @@ void drawSphereWireframe(const Camera& camera, const Matrix& transform)
 
 	const int NDIV = 16;
 	for (int i = 0; i < NDIV; i++) {
-		GLfloat vertex[NDIV * 3];
+		GLfloat vertex[(NDIV / 2 + 1) * 3];
 		float phi = 2 * M_PI * i / NDIV;
 		float cosphi = cos(phi);
 		float sinphi = sin(phi);
-		for (int j = 0; j < NDIV; j++) {
+		for (int j = 0; j < (NDIV / 2 + 1); j++) {
 			float theta = 2 * M_PI * j / NDIV;
 			vertex[j * 3 + 0] = cosphi * cos(theta);
 			vertex[j * 3 + 1] = cosphi * sin(theta);
 			vertex[j * 3 + 2] = sinphi;
 		};
 		glVertexAttribPointer(aPos, 3, GL_FLOAT, GL_FALSE, 0, vertex);
-		glDrawArrays(GL_LINE_LOOP, 0, NDIV);
+		glDrawArrays(GL_LINE_LOOP, 0, (NDIV / 2 + 1));
 	}
 
 	for (int i = 0; i < NDIV; i++) {

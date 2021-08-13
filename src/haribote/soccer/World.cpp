@@ -33,7 +33,7 @@ public:
 	{
 		m_world.setGravity(0, 0, -9.8);
 
-		m_ball.setPosition(0, 0.1, 0.5);
+		m_ball.setPosition(0.2, 0, 0.5);
 	}
 
 	~WorldImpl()
@@ -42,20 +42,27 @@ public:
 
 	void draw() override
 	{
-		dSpaceCollide(m_space, this, nearCallback);
+		if (!m_paused) {
+			dSpaceCollide(m_space, this, nearCallback);
 
-		m_world.step(0.005);
+			m_world.step(0.005);
 
-		m_contactGroup.empty();
+			m_contactGroup.empty();
+		}
 
-		static int rot = 0;
-		rot++;
-		m_mainCamera.setPan(0.2 * sin(rot * M_PI / 180));
+		//static int rot = 0;
+		//rot++;
+		//m_mainCamera.setPan(0.2 * sin(rot * M_PI / 180));
 
 		drawAxes(m_mainCamera, Matrix());
 
 		m_field.draw(m_mainCamera);
 		m_ball.drawWireframe(m_mainCamera);
+	}
+
+	void pause() override
+	{
+		m_paused = !m_paused;
 	}
 
 private:
@@ -99,6 +106,8 @@ private:
 			}
 		}
 	}
+
+	bool m_paused = true;
 
 	ODE m_ode;
 	dWorld m_world;
