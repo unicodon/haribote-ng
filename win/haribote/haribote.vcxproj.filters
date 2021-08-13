@@ -10,6 +10,9 @@
     <Filter Include="geom">
       <UniqueIdentifier>{f0436eba-46de-46f5-8100-7586b672bb75}</UniqueIdentifier>
     </Filter>
+    <Filter Include="obj">
+      <UniqueIdentifier>{f09ad35c-4eab-4f5c-8b31-374d01a7b6c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\haribote\soccer\World.h">
@@ -24,12 +27,6 @@
     <ClInclude Include="..\..\src\haribote\soccer\Ball.h">
       <Filter>soccer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\haribote\geom\Body.h">
-      <Filter>geom</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\haribote\geom\Box.h">
-      <Filter>geom</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\haribote\geom\Camera.h">
       <Filter>geom</Filter>
     </ClInclude>
@@ -37,6 +34,18 @@
       <Filter>geom</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\haribote\geom\ODEUtils.h">
+      <Filter>geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\haribote\obj\BoxObject.h">
+      <Filter>obj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\haribote\geom\Box.h">
+      <Filter>geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\haribote\geom\Geom.h">
+      <Filter>geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\haribote\geom\Sphere.h">
       <Filter>geom</Filter>
     </ClInclude>
   </ItemGroup>
@@ -50,12 +59,6 @@
     <ClCompile Include="..\..\src\haribote\soccer\Ball.cpp">
       <Filter>soccer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\haribote\geom\Body.cpp">
-      <Filter>geom</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\haribote\geom\Box.cpp">
-      <Filter>geom</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\haribote\geom\Camera.cpp">
       <Filter>geom</Filter>
     </ClCompile>
@@ -63,6 +66,15 @@
       <Filter>geom</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\haribote\geom\ODEUtils.cpp">
+      <Filter>geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\haribote\obj\BoxObject.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\haribote\geom\Box.cpp">
+      <Filter>geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\haribote\geom\Sphere.cpp">
       <Filter>geom</Filter>
     </ClCompile>
   </ItemGroup>

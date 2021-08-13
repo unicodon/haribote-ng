@@ -2,10 +2,14 @@
 
 #include <ode/ode.h>
 #include <ode/odecpp.h>
-#include "../geom/Camera.h"
+#include "../geom/Geom.h"
 #include "../geom/GraphicsUtils.h"
+#include "../obj/BoxObject.h"
 #include "Field.h"
 #include "Ball.h"
+
+#include <memory>
+#include <vector>
 
 class ODE {
 public:
@@ -33,7 +37,11 @@ public:
 	{
 		m_world.setGravity(0, 0, -9.8);
 
-		m_ball.setPosition(0.2, 0, 0.5);
+		m_ball.geom().setPosition(0.2, 0, 0.5);
+
+		auto box = std::make_unique<BoxObject>(1, 0.5, 0.5, 0.02, m_world, m_space);
+		box->geom().setPosition(0, 0, 1);
+		m_objects.push_back(std::move(box));
 	}
 
 	~WorldImpl()
@@ -58,6 +66,10 @@ public:
 
 		m_field.draw(m_mainCamera);
 		m_ball.drawWireframe(m_mainCamera);
+
+		for (auto& obj : m_objects) {
+			obj->drawWireframe(m_mainCamera);
+		}
 	}
 
 	void pause() override
@@ -115,6 +127,8 @@ private:
 	dJointGroup m_contactGroup;
 	Field m_field;
 	Ball m_ball;
+
+	std::vector<std::unique_ptr<Geom>> m_objects;
 
 	Camera m_mainCamera;
 };

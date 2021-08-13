@@ -2,13 +2,13 @@
 
 #include "Geom.h"
 
-class Box : public Geom {
+class Sphere : public Geom {
 public:
-	Box(dReal lx, dReal ly, dReal lz, dSpaceID space);
+	Sphere(dReal radius, dSpaceID space);
 
 	dGeom& geom() override { return m_geom; }
 	void drawWireframe(const Camera& camera) override;
 
 protected:
-	dBox m_geom;
+	dSphere m_geom;
 };
