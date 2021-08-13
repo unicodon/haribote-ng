@@ -8,6 +8,8 @@
 #include "Field.h"
 #include "Ball.h"
 
+#include "../geom/MeshLoader.h"
+
 #include <memory>
 #include <vector>
 
@@ -24,6 +26,109 @@ public:
 	}
 };
 
+const char* draw_mesh_filename[] = {
+//	"mesh/draw_chin.x",
+	"mesh/draw_body_tail.x",
+
+	"mesh/draw_head_ear_eye.x",
+	"mesh/draw_chin.x",
+	"mesh/draw_neck.x",
+
+	"mesh/draw_rf1.x",
+	"mesh/draw_rf2.x",
+	"mesh/draw_rf3.x",
+	"mesh/draw_lf1.x",
+	"mesh/draw_lf2.x",
+	"mesh/draw_lf3.x",
+	"mesh/draw_rh1.x",
+	"mesh/draw_rh2.x",
+	"mesh/draw_rh3.x",
+	"mesh/draw_lh1.x",
+	"mesh/draw_lh2.x",
+	"mesh/draw_lh3.x",
+};
+
+
+const double ini_body_pos[][3] = {
+	{	0.0,			0.0,		0.0},
+
+	{	0.0675,			0.0,		0.0800 + 0.0195},
+	{	0.0675 + 0.0400,	0.0,		0.0800 + 0.0195 - 0.0175},
+	{	0.0675,			0.0,		0.0195},
+
+	{	0.0650,			-0.125 / 2,	0},
+	{	0.0650,			-0.125 / 2,	0},
+	{	0.0650 + 0.0078,	-0.1344 / 2,	-0.0695},
+	{	0.0650,			0.1250 / 2,	0},
+	{	0.0650,			0.1250 / 2,	0},
+	{	0.0650 + 0.0078,	0.1344 / 2,	-0.0695},
+	{	-0.0650,		-0.1250 / 2,	0},
+	{	-0.0650,		-0.1250 / 2,	0},
+	{	-0.0728,		-0.1344 / 2,	-0.0695},
+	{	-0.0650,		0.1250 / 2,	0},
+	{	-0.0650,		0.1250 / 2,	0},
+	{	-0.0728,		0.1344 / 2,	-0.0695},
+};
+
+const char* geom_mesh_filename[] = {
+	"mesh/geom_body.x",
+
+	"mesh/geom_head.x",
+	"mesh/draw_chin.x",
+	"mesh/geom_rf2.x",
+	"mesh/geom_rf3.x",
+	"mesh/geom_lf2.x",
+	"mesh/geom_lf3.x",
+	"mesh/geom_rh2.x",
+	"mesh/geom_rh3.x",
+	"mesh/geom_lh2.x",
+	"mesh/geom_lh3.x",
+};
+
+
+struct Robot {
+public:
+	struct Part {
+		Value mesh;
+		Vector pos;
+	};
+
+	void load()
+	{
+		for (auto path : geom_mesh_filename) {
+			loadMeshData(path);
+		}
+
+		for (int i = 0; i < 16; i++) {
+			Part part;
+			part.mesh = loadMeshData(draw_mesh_filename[i]);
+			part.pos = Vector(ini_body_pos[i][0], ini_body_pos[i][1], ini_body_pos[i][2]);
+			parts.push_back(part);
+		}
+
+	}
+
+	void draw(const Camera& camera)
+	{
+		static int rot = 0;
+		rot++;
+		Matrix m;
+		m.scale(4);
+		m.rotateZ(rot * 4 * M_PI / 180);
+//		m.rotateZ(20 * M_PI / 180);
+		for (auto& part : parts) {
+			Matrix mat = m;
+			mat.translate(part.pos);
+			drawMesh(camera, part.mesh, mat);
+		}
+
+	}
+
+	std::vector<Part> parts;
+};
+
+Robot robot;
+
 class WorldImpl : public World
 {
 public:
@@ -35,6 +140,8 @@ public:
 		, m_field(m_world, m_space)
 		, m_ball(m_world, m_space)
 	{
+		robot.load();
+
 		m_world.setGravity(0, 0, -9.8);
 
 		m_ball.geom().setPosition(0.2, 0, 0.5);
@@ -62,14 +169,16 @@ public:
 		//rot++;
 		//m_mainCamera.setPan(0.2 * sin(rot * M_PI / 180));
 
-		drawAxes(m_mainCamera, Matrix());
+//		drawAxes(m_mainCamera, Matrix());
 
-		m_field.draw(m_mainCamera);
-		m_ball.drawWireframe(m_mainCamera);
+//		m_field.draw(m_mainCamera);
+//		m_ball.drawWireframe(m_mainCamera);
 
 		for (auto& obj : m_objects) {
-			obj->drawWireframe(m_mainCamera);
+//			obj->drawWireframe(m_mainCamera);
 		}
+
+		robot.draw(m_mainCamera);
 	}
 
 	void pause() override

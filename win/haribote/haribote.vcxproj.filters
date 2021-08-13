@@ -13,6 +13,9 @@
     <Filter Include="obj">
       <UniqueIdentifier>{f09ad35c-4eab-4f5c-8b31-374d01a7b6c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{bb4bff2a-fe33-4b8e-961a-1a930b3ffe2b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\haribote\soccer\World.h">
@@ -48,6 +51,21 @@
     <ClInclude Include="..\..\src\haribote\geom\Sphere.h">
       <Filter>geom</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\haribote\geom\Mesh.h">
+      <Filter>geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\haribote\geom\TriMeshData.h">
+      <Filter>geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\haribote\geom\MeshLoader.h">
+      <Filter>geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\haribote\util\Json.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\haribote\util\Value.h">
+      <Filter>util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\haribote\soccer\World.cpp">
@@ -76,6 +94,18 @@
     </ClCompile>
     <ClCompile Include="..\..\src\haribote\geom\Sphere.cpp">
       <Filter>geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\haribote\geom\Mesh.cpp">
+      <Filter>geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\haribote\geom\MeshLoader.cpp">
+      <Filter>geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\haribote\util\Json.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\haribote\util\Value.cpp">
+      <Filter>util</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

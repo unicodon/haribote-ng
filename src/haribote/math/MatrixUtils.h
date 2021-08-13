@@ -129,11 +129,17 @@ struct MatrixBase {
 		return *this;
 	}
 
-
 	void translate(T x, T y, T z)
 	{
 		MatrixBase mat;
 		mat[3] = VectorBase<T>(x, y, z);
+		*this = *this * mat;
+	}
+
+	void translate(const VectorBase<T>& vec)
+	{
+		MatrixBase mat;
+		mat[3] = vec;
 		*this = *this * mat;
 	}
 

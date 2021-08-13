@@ -8,6 +8,7 @@
 class Camera;
 
 GLuint compileShader(GLuint shaderType, const GLchar* source);
+GLuint commonProgram();
 
 void drawAxes(const Camera& camera, const Matrix& transform);
 void drawBoxWireframe(const Camera& camera, const Matrix& transform);
