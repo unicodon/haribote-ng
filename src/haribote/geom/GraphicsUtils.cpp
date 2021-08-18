@@ -201,3 +201,64 @@ void drawSphereWireframe(const Camera& camera, const Matrix& transform)
 	}
 
 }
+
+void drawTriMeshWireframe(const Camera& camera, const Matrix& transform, const TriMeshData& data)
+{
+	Matrix mat = camera.projection();
+	mat *= camera.view();
+	mat *= transform;
+
+	auto prog = commonProgram();
+	glUseProgram(prog);
+
+	static GLint aPos = glGetAttribLocation(prog, "pos");
+	static GLint uMVP = glGetUniformLocation(prog, "mvp");
+	static GLint uColor = glGetUniformLocation(prog, "color");
+
+	GLfloat white[4] = { 1, 1, 1, 1 };
+	glUniform4fv(uColor, 1, white);
+
+	glUniformMatrix4fv(uMVP, 1, GL_FALSE, mat.data());
+
+	glEnableVertexAttribArray(aPos);
+
+	size_t numTriangles = data.indices.size() / 3;
+	std::vector<GLfloat> vertices(numTriangles * 6 * 3);
+	auto ptr = vertices.data();
+	for (size_t i = 0; i < numTriangles; i++) {
+		int idx[3] = {
+			data.indices[3 * i + 0],
+			data.indices[3 * i + 1],
+			data.indices[3 * i + 2]
+		};
+
+		*ptr++ = data.vertices[3 * idx[0] + 0];
+		*ptr++ = data.vertices[3 * idx[0] + 1];
+		*ptr++ = data.vertices[3 * idx[0] + 2];
+		*ptr++ = data.vertices[3 * idx[1] + 0];
+		*ptr++ = data.vertices[3 * idx[1] + 1];
+		*ptr++ = data.vertices[3 * idx[1] + 2];
+
+		*ptr++ = data.vertices[3 * idx[1] + 0];
+		*ptr++ = data.vertices[3 * idx[1] + 1];
+		*ptr++ = data.vertices[3 * idx[1] + 2];
+		*ptr++ = data.vertices[3 * idx[2] + 0];
+		*ptr++ = data.vertices[3 * idx[2] + 1];
+		*ptr++ = data.vertices[3 * idx[2] + 2];
+
+		*ptr++ = data.vertices[3 * idx[2] + 0];
+		*ptr++ = data.vertices[3 * idx[2] + 1];
+		*ptr++ = data.vertices[3 * idx[2] + 2];
+		*ptr++ = data.vertices[3 * idx[0] + 0];
+		*ptr++ = data.vertices[3 * idx[0] + 1];
+		*ptr++ = data.vertices[3 * idx[0] + 2];
+	}
+
+	glVertexAttribPointer(aPos, 3, GL_FLOAT, GL_FALSE, 0, vertices.data());
+	glDrawArrays(GL_LINES, 0, vertices.size() / 3);
+}
+
+void drawTriMesh(const Camera& camera, const LightInfo& lights, const Matrix& transform, const TriMeshData&)
+{
+
+}

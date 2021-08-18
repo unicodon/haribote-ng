@@ -66,6 +66,9 @@
     <ClInclude Include="..\..\src\haribote\util\Value.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\haribote\geom\Light.h">
+      <Filter>geom</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\haribote\soccer\World.cpp">
@@ -106,6 +109,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\haribote\util\Value.cpp">
       <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\haribote\geom\TriMeshData.cpp">
+      <Filter>geom</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

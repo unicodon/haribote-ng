@@ -14,10 +14,21 @@ public:
 	void setTilt(float rad);
 	void setPan(float rad);
 
+	void setPosition(const Vector&);
+	void setPosition(float x, float y, float z)
+	{
+		setPosition(Vector(x, y, z));
+	}
+	void lookAt(Vector);
+	void lookAt(float x, float y, float z)
+	{
+		lookAt(Vector(x, y, z));
+	}
+
 protected:
 	void updateViewMatrix();
 
-	Vector position;//視点
+	Vector m_position;//視点
 	float m_tilt;
 	float m_pan;
 	float m_roll;

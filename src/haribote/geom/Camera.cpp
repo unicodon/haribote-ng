@@ -5,7 +5,7 @@
 
 Camera::Camera()
 {
-	position[0] = position[1] = position[2] = 0;
+	m_position[0] = m_position[1] = m_position[2] = 0;
 
 	m_tilt = -25 * M_PI / 180;
 	m_pan = 0;
@@ -16,9 +16,9 @@ Camera::Camera()
 	fov = 30;
 	aspect = 1280.0/720.0;
 
-	position[0] = 0.200;
-	position[1] = -1.500;
-	position[2] = 1.000;
+	m_position[0] = 0.200;
+	m_position[1] = -1.500;
+	m_position[2] = 1.000;
 
 	updateViewMatrix();
 }
@@ -35,6 +35,23 @@ void Camera::setPan(float rad)
 	updateViewMatrix();
 }
 
+void Camera::setPosition(const Vector& pos)
+{
+	m_position = pos;
+	updateViewMatrix();
+}
+
+void Camera::lookAt(Vector pos)
+{
+	pos -= m_position;
+	auto x = pos[1];
+	auto y = -pos[0];
+	auto z = pos[2];
+	m_pan = atan2(y, x);
+	m_tilt = atan2(z, x * cos(m_pan));
+	updateViewMatrix();
+}
+
 void Camera::updateViewMatrix()
 {
 	Matrix mat;
@@ -42,7 +59,7 @@ void Camera::updateViewMatrix()
 	mat.rotateX(m_tilt);
 	mat.rotateY(m_pan);
 	mat.rotateX(0.5 * M_PI);
-	mat.translate(-position[0], -position[1], -position[2]);
+	mat.translate(-m_position[0], -m_position[1], -m_position[2]);
 	m_viewMatrix = mat;
 }
 

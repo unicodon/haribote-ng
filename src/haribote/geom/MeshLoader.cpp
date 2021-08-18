@@ -806,7 +806,7 @@ Value conv(ColorRGB& in)
 void exportMeshData(const char* path, MeshData opaque)
 {
 	std::string p = path;
-	p += ".json";
+//	p += ".json";
 	Value::Object obj;
 
 	Mesh* mesh = (Mesh*)opaque;
@@ -821,6 +821,52 @@ void exportMeshData(const char* path, MeshData opaque)
 			a.push_back(std::move(v));
 		}
 		obj["vertices"] = std::move(a);
+	}
+
+	{
+		Value::Array a;
+		for (auto& face : mesh->faces) {
+			Value::Array v;
+			if (face.nFaceVertexIndices == 4) {
+				v.push_back(face.faceVertexIndices[0]);
+				v.push_back(face.faceVertexIndices[1]);
+				v.push_back(face.faceVertexIndices[2]);
+
+				v.push_back(face.faceVertexIndices[2]);
+				v.push_back(face.faceVertexIndices[3]);
+				v.push_back(face.faceVertexIndices[0]);
+			}
+			else {
+				for (auto& idx : face.faceVertexIndices) {
+					v.push_back(idx);
+				}
+			}
+			a.push_back(std::move(v));
+		}
+		obj["faceVertices"] = std::move(a);
+	}
+
+	{
+		Value::Array a;
+		for (auto& face : mesh->normals.faceNormals) {
+			Value::Array v;
+			if (face.nFaceVertexIndices == 4) {
+				v.push_back(face.faceVertexIndices[0]);
+				v.push_back(face.faceVertexIndices[1]);
+				v.push_back(face.faceVertexIndices[2]);
+
+				v.push_back(face.faceVertexIndices[2]);
+				v.push_back(face.faceVertexIndices[3]);
+				v.push_back(face.faceVertexIndices[0]);
+			}
+			else {
+				for (auto& idx : face.faceVertexIndices) {
+					v.push_back(idx);
+				}
+			}
+			a.push_back(std::move(v));
+		}
+		obj["faceNormals"] = std::move(a);
 	}
 
 	{
@@ -848,15 +894,15 @@ void exportMeshData(const char* path, MeshData opaque)
 		int idx = 0;
 		for (auto& mat : mesh->materialList.materials) {
 			Value::Object o;
-			o["emissive"] = conv(mat.emissiveColor);
-			o["face"] = conv(mat.faceColor);
+			o["diffuse"] = conv(mat.faceColor);
 			o["specular"] = conv(mat.specularColor);
-			o["power"] = mat.power;
 
 			Value::Array vert;
 
+			Value::Array fa;
 			auto& faces = mat_to_face[idx];
 			for (auto& i : faces) {
+				fa.push_back(i);
 				auto& face = mesh->faces[i];
 				auto& norm = mesh->normals.faceNormals[i];
 				if (face.nFaceVertexIndices != norm.nFaceVertexIndices) {
@@ -896,6 +942,7 @@ void exportMeshData(const char* path, MeshData opaque)
 				}
 			}
 			o["triangles"] = std::move(vert);
+			o["faces"] = std::move(fa);
 
 			a.push_back(std::move(o));
 			idx++;
@@ -1014,27 +1061,31 @@ void drawMesh(const Camera& camera, Value& data, const Matrix& transform)
 
 	auto& materials = mesh["materials"].asArray();
 	auto& vertices = mesh["vertices"].asArray();
+	auto& faces = mesh["faceVertices"].asArray();
 
 	for (auto& elem : materials) {
 		auto& material = elem.asObject();
 		auto& triangles = material["triangles"].asArray();
-		auto& faceColor = material["face"].asArray();
+		auto& matfaces = material["faces"].asArray();
+		auto& diffuse = material["diffuse"].asArray();
 		GLfloat color[4] = {
-			faceColor[0].asNumber(),
-			faceColor[1].asNumber(),
-			faceColor[2].asNumber(),
+			diffuse[0].asNumber(),
+			diffuse[1].asNumber(),
+			diffuse[2].asNumber(),
 			1
 		};
 		glUniform4fv(uColor, 1, color);
 
-		int n = triangles.size() / 6;
+		int n = matfaces.size();
 		std::vector<GLfloat> vert(n * 18);
 		auto ptr = vert.data();
 		for (int i = 0; i < n; i++) {
+			int faceIdx = matfaces[i].asInt();
+			auto faceVerts = faces[faceIdx].asArray();
 			int idx[3] = {
-				triangles[i * 6 + 0].asInt(),
-				triangles[i * 6 + 1].asInt(),
-				triangles[i * 6 + 2].asInt()
+				faceVerts[0].asInt(),
+				faceVerts[1].asInt(),
+				faceVerts[2].asInt()
 			};
 			auto arr0 = vertices[idx[0]].asArray();
 			auto arr1 = vertices[idx[1]].asArray();

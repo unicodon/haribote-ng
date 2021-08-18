@@ -155,6 +155,7 @@
     <ClInclude Include="..\..\src\haribote\geom\Camera.h" />
     <ClInclude Include="..\..\src\haribote\geom\Geom.h" />
     <ClInclude Include="..\..\src\haribote\geom\GraphicsUtils.h" />
+    <ClInclude Include="..\..\src\haribote\geom\Light.h" />
     <ClInclude Include="..\..\src\haribote\geom\Mesh.h" />
     <ClInclude Include="..\..\src\haribote\geom\MeshLoader.h" />
     <ClInclude Include="..\..\src\haribote\geom\ODEUtils.h" />
@@ -176,6 +177,7 @@
     <ClCompile Include="..\..\src\haribote\geom\MeshLoader.cpp" />
     <ClCompile Include="..\..\src\haribote\geom\ODEUtils.cpp" />
     <ClCompile Include="..\..\src\haribote\geom\Sphere.cpp" />
+    <ClCompile Include="..\..\src\haribote\geom\TriMeshData.cpp" />
     <ClCompile Include="..\..\src\haribote\obj\BoxObject.cpp" />
     <ClCompile Include="..\..\src\haribote\soccer\Ball.cpp" />
     <ClCompile Include="..\..\src\haribote\soccer\Field.cpp" />

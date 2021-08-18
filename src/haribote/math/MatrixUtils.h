@@ -14,20 +14,12 @@ struct VectorBase {
 		vec[3] = 1;
 	}
 
-	VectorBase(T x, T y, T z, T w)
+	VectorBase(T x, T y, T z, T w = 1)
 	{
 		vec[0] = x;
 		vec[1] = y;
 		vec[2] = z;
 		vec[3] = w;
-	}
-
-	VectorBase(T x, T y, T z)
-	{
-		vec[0] = x;
-		vec[1] = y;
-		vec[2] = z;
-		vec[3] = 1;
 	}
 
 	VectorBase operator+(const VectorBase& rhs)
@@ -44,14 +36,22 @@ struct VectorBase {
 		return *this;
 	}
 
-	VectorBase operator*(const VectorBase& rhs)
+	VectorBase& operator-=(const VectorBase& rhs)
 	{
-		return {
-			vec[0] * rhs.vec[0],
-			vec[1] * rhs.vec[1],
-			vec[2] * rhs.vec[2],
-			vec[3] * rhs.vec[3]
-		};
+		vec[0] -= rhs[0];
+		vec[1] -= rhs[1];
+		vec[2] -= rhs[2];
+		vec[3] -= rhs[3];
+		return *this;
+	}
+
+	T operator*(const VectorBase& rhs)
+	{
+		return
+			vec[0] * rhs.vec[0] +
+			vec[1] * rhs.vec[1] +
+			vec[2] * rhs.vec[2] +
+			vec[3] * rhs.vec[3];
 	}
 
 	VectorBase& operator*=(T scalar)

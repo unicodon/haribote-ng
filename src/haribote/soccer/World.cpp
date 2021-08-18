@@ -7,8 +7,11 @@
 #include "../obj/BoxObject.h"
 #include "Field.h"
 #include "Ball.h"
+#include "../geom/TriMeshData.h"
+#include "../geom/Mesh.h"
 
 #include "../geom/MeshLoader.h"
+#include "../geom/Light.h"
 
 #include <memory>
 #include <vector>
@@ -71,6 +74,10 @@ const double ini_body_pos[][3] = {
 };
 
 const char* geom_mesh_filename[] = {
+//	"mesh/draw_body_tail.x",
+	"mesh/draw_head_ear_eye.x",
+//	"mesh/draw_chin.x",
+
 	"mesh/geom_body.x",
 
 	"mesh/geom_head.x",
@@ -89,26 +96,37 @@ const char* geom_mesh_filename[] = {
 struct Robot {
 public:
 	struct Part {
-		Value mesh;
-		Vector pos;
+		std::unique_ptr<Mesh> mesh;
 	};
 
-	void load()
+	void load(dWorldID world, dSpaceID space)
 	{
 		for (auto path : geom_mesh_filename) {
-			loadMeshData(path);
+			Part part;
+			auto mesh = createTriMeshData(loadMeshData(path));
+			part.mesh = std::make_unique<Mesh>(space, std::move(mesh));
+
+			dBody* b = new dBody(world);
+			dMass mass;
+			mass.setBoxTotal(1, 0.1, 0.1, 0.1);
+			b->setMass(mass);
+			part.mesh->geom().setBody(*b);
+			part.mesh->geom().setPosition(0, 0, .5);
+
+			parts.push_back(std::move(part));
+			return;
 		}
 
-		for (int i = 0; i < 16; i++) {
-			Part part;
-			part.mesh = loadMeshData(draw_mesh_filename[i]);
-			part.pos = Vector(ini_body_pos[i][0], ini_body_pos[i][1], ini_body_pos[i][2]);
-			parts.push_back(part);
-		}
+		//for (int i = 0; i < 16; i++) {
+		//	Part part;
+		//	part.mesh = loadMeshData(draw_mesh_filename[i]);
+		//	part.pos = Vector(ini_body_pos[i][0], ini_body_pos[i][1], ini_body_pos[i][2]);
+		//	parts.push_back(part);
+		//}
 
 	}
 
-	void draw(const Camera& camera)
+	void draw(const Camera& camera, const LightInfo& lights)
 	{
 		static int rot = 0;
 		rot++;
@@ -117,9 +135,16 @@ public:
 		m.rotateZ(rot * 4 * M_PI / 180);
 //		m.rotateZ(20 * M_PI / 180);
 		for (auto& part : parts) {
-			Matrix mat = m;
-			mat.translate(part.pos);
-			drawMesh(camera, part.mesh, mat);
+			if (part.mesh) {
+//				part.mesh->draw(camera, lights);
+				part.mesh->drawWireframe(camera);
+			}
+//			Matrix mat = m;
+//			mat.translate(part.pos);
+//			drawMesh(camera, part.mesh, mat);
+			//drawTriMesh(camera, mat, part.tri);
+			//drawBoxWireframe(camera, mat);
+
 		}
 
 	}
@@ -127,7 +152,7 @@ public:
 	std::vector<Part> parts;
 };
 
-Robot robot;
+Robot* robot;
 
 class WorldImpl : public World
 {
@@ -140,7 +165,8 @@ public:
 		, m_field(m_world, m_space)
 		, m_ball(m_world, m_space)
 	{
-		robot.load();
+		robot = new Robot;
+		robot->load(m_world, m_space);
 
 		m_world.setGravity(0, 0, -9.8);
 
@@ -149,10 +175,16 @@ public:
 		auto box = std::make_unique<BoxObject>(1, 0.5, 0.5, 0.02, m_world, m_space);
 		box->geom().setPosition(0, 0, 1);
 		m_objects.push_back(std::move(box));
+
+		m_mainCamera.setPosition(0, -0.3, 0.2);
+		m_mainCamera.lookAt(0, 0, 0);
+
+		initializeMainLights();
 	}
 
 	~WorldImpl()
 	{
+		delete robot;
 	}
 
 	void draw() override
@@ -160,7 +192,7 @@ public:
 		if (!m_paused) {
 			dSpaceCollide(m_space, this, nearCallback);
 
-			m_world.step(0.005);
+			m_world.step(0.002);
 
 			m_contactGroup.empty();
 		}
@@ -178,12 +210,24 @@ public:
 //			obj->drawWireframe(m_mainCamera);
 		}
 
-		robot.draw(m_mainCamera);
+		robot->draw(m_mainCamera, m_mainLights);
 	}
 
 	void pause() override
 	{
 		m_paused = !m_paused;
+	}
+
+	void initializeMainLights()
+	{
+		{
+			DirectionalLight light;
+			light.direction = Vector(0, 0, -1);
+			light.ambient = Vector(0.1, 0.1, 0.1);
+			light.diffuse = Vector(0.3, 0.3, 0.3);
+			light.specular = Vector(0, 0, 0);
+			m_mainLights.directionalLights[0] = std::move(light);
+		}
 	}
 
 private:
@@ -228,7 +272,7 @@ private:
 		}
 	}
 
-	bool m_paused = true;
+	bool m_paused = false;
 
 	ODE m_ode;
 	dWorld m_world;
@@ -240,6 +284,8 @@ private:
 	std::vector<std::unique_ptr<Geom>> m_objects;
 
 	Camera m_mainCamera;
+
+	LightInfo m_mainLights;
 };
 
 std::unique_ptr<World> World::create()
