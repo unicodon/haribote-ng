@@ -1044,7 +1044,7 @@ void drawMesh(const Camera& camera, Value& data, const Matrix& transform)
 	mat *= camera.view();
 	mat *= transform;
 
-	auto prog = commonProgram();
+	auto prog = wireframeProgram();
 	glUseProgram(prog);
 
 	static GLint aPos = glGetAttribLocation(prog, "pos");

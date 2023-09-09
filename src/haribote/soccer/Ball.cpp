@@ -3,7 +3,7 @@
 #include "../geom/GraphicsUtils.h"
 #include "../geom/ODEUtils.h"
 
-const dReal BallRadius = 0.1;
+const dReal BallRadius = 0.04;
 const dReal BallWeight = 0.01;
 
 Ball::Ball(dWorldID world, dSpaceID space)

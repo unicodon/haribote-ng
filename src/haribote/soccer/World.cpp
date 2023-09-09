@@ -136,8 +136,8 @@ public:
 //		m.rotateZ(20 * M_PI / 180);
 		for (auto& part : parts) {
 			if (part.mesh) {
-//				part.mesh->draw(camera, lights);
-				part.mesh->drawWireframe(camera);
+				part.mesh->draw(camera, lights);
+//				part.mesh->drawWireframe(camera);
 			}
 //			Matrix mat = m;
 //			mat.translate(part.pos);
@@ -201,13 +201,13 @@ public:
 		//rot++;
 		//m_mainCamera.setPan(0.2 * sin(rot * M_PI / 180));
 
-//		drawAxes(m_mainCamera, Matrix());
+		drawAxes(m_mainCamera, Matrix());
 
-//		m_field.draw(m_mainCamera);
-//		m_ball.drawWireframe(m_mainCamera);
+		m_field.draw(m_mainCamera);
+		m_ball.drawWireframe(m_mainCamera);
 
 		for (auto& obj : m_objects) {
-//			obj->drawWireframe(m_mainCamera);
+			obj->drawWireframe(m_mainCamera);
 		}
 
 		robot->draw(m_mainCamera, m_mainLights);

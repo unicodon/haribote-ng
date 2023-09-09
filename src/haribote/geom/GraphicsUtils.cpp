@@ -14,16 +14,18 @@ GLuint compileShader(GLuint shaderType, const GLchar* source)
 	return shader;
 }
 
-GLuint commonProgram()
+GLuint wireframeProgram()
 {
 	static GLuint prog;
 	static std::once_flag once;
 	std::call_once(once, [] {
 		const GLchar* vertSource =
-			"attribute mediump vec4 pos;"
-			"uniform mediump mat4 mvp;"
+			"attribute mediump vec3 pos;"
+			"uniform mediump mat4 projection;"
+			"uniform mediump mat4 view;"
+			"uniform mediump mat4 model;"
 			"void main() {"
-			"	vec4 tmp = mvp * pos;"
+			"	vec4 tmp = projection * view * model * vec4(pos, 1.0);"
 			"	gl_Position = tmp;"
 			"}";
 
@@ -45,27 +47,30 @@ GLuint commonProgram()
 	return prog;
 }
 
+
 void drawAxes(const Camera& camera, const Matrix& transform)
 {
-	Matrix mat = camera.projection();
-	mat *= camera.view();
-	mat *= transform;
-	mat.scaleX(0.1);
-	mat.scaleY(0.1);
-	mat.scaleZ(0.1);
+	Matrix model = transform;
+	model.scaleX(0.1);
+	model.scaleY(0.1);
+	model.scaleZ(0.1);
 
-	auto prog = commonProgram();
+	auto prog = wireframeProgram();
 	glUseProgram(prog);
 
 	static GLint aPos = glGetAttribLocation(prog, "pos");
-	static GLint uMVP = glGetUniformLocation(prog, "mvp");
+	static GLint uProjection = glGetUniformLocation(prog, "projection");
+	static GLint uView = glGetUniformLocation(prog, "view");
+	static GLint uModel = glGetUniformLocation(prog, "model");
 	static GLint uColor = glGetUniformLocation(prog, "color");
 
 	GLfloat red[4] = { 1, 0, 0, 1 };
 	GLfloat green[4] = { 0, 1, 0, 1 };
 	GLfloat blue[4] = { 0, 0, 1, 1 };
 
-	glUniformMatrix4fv(uMVP, 1, GL_FALSE, mat.data());
+	glUniformMatrix4fv(uProjection, 1, GL_FALSE, camera.projection().data());
+	glUniformMatrix4fv(uView, 1, GL_FALSE, camera.view().data());
+	glUniformMatrix4fv(uModel, 1, GL_FALSE, model.data());
 
 	glEnableVertexAttribArray(aPos);
 
@@ -100,21 +105,21 @@ void drawAxes(const Camera& camera, const Matrix& transform)
 
 void drawBoxWireframe(const Camera& camera, const Matrix& transform)
 {
-	Matrix mat = camera.projection();
-	mat *= camera.view();
-	mat *= transform;
-
-	auto prog = commonProgram();
+	auto prog = wireframeProgram();
 	glUseProgram(prog);
 
 	static GLint aPos = glGetAttribLocation(prog, "pos");
-	static GLint uMVP = glGetUniformLocation(prog, "mvp");
+	static GLint uProjection = glGetUniformLocation(prog, "projection");
+	static GLint uView = glGetUniformLocation(prog, "view");
+	static GLint uModel = glGetUniformLocation(prog, "model");
 	static GLint uColor = glGetUniformLocation(prog, "color");
 
 	GLfloat white[4] = { 1, 1, 1, 1 };
 	glUniform4fv(uColor, 1, white);
 
-	glUniformMatrix4fv(uMVP, 1, GL_FALSE, mat.data());
+	glUniformMatrix4fv(uProjection, 1, GL_FALSE, camera.projection().data());
+	glUniformMatrix4fv(uView, 1, GL_FALSE, camera.view().data());
+	glUniformMatrix4fv(uModel, 1, GL_FALSE, transform.data());
 
 	glEnableVertexAttribArray(aPos);
 	const GLfloat vertex[] = {
@@ -151,21 +156,21 @@ void drawBoxWireframe(const Camera& camera, const Matrix& transform)
 
 void drawSphereWireframe(const Camera& camera, const Matrix& transform)
 {
-	Matrix mat = camera.projection();
-	mat *= camera.view();
-	mat *= transform;
-
-	auto prog = commonProgram();
+	auto prog = wireframeProgram();
 	glUseProgram(prog);
 
 	static GLint aPos = glGetAttribLocation(prog, "pos");
-	static GLint uMVP = glGetUniformLocation(prog, "mvp");
+	static GLint uProjection = glGetUniformLocation(prog, "projection");
+	static GLint uView = glGetUniformLocation(prog, "view");
+	static GLint uModel = glGetUniformLocation(prog, "model");
 	static GLint uColor = glGetUniformLocation(prog, "color");
+
+	glUniformMatrix4fv(uProjection, 1, GL_FALSE, camera.projection().data());
+	glUniformMatrix4fv(uView, 1, GL_FALSE, camera.view().data());
+	glUniformMatrix4fv(uModel, 1, GL_FALSE, transform.data());
 
 	GLfloat white[4] = { 1, 1, 1, 1 };
 	glUniform4fv(uColor, 1, white);
-
-	glUniformMatrix4fv(uMVP, 1, GL_FALSE, mat.data());
 
 	glEnableVertexAttribArray(aPos);
 
@@ -204,21 +209,22 @@ void drawSphereWireframe(const Camera& camera, const Matrix& transform)
 
 void drawTriMeshWireframe(const Camera& camera, const Matrix& transform, const TriMeshData& data)
 {
-	Matrix mat = camera.projection();
-	mat *= camera.view();
-	mat *= transform;
-
-	auto prog = commonProgram();
+	auto prog = wireframeProgram();
 	glUseProgram(prog);
 
 	static GLint aPos = glGetAttribLocation(prog, "pos");
-	static GLint uMVP = glGetUniformLocation(prog, "mvp");
+	static GLint uProjection = glGetUniformLocation(prog, "projection");
+	static GLint uView = glGetUniformLocation(prog, "view");
+	static GLint uModel = glGetUniformLocation(prog, "model");
 	static GLint uColor = glGetUniformLocation(prog, "color");
+
+	glUniformMatrix4fv(uProjection, 1, GL_FALSE, camera.projection().data());
+	glUniformMatrix4fv(uView, 1, GL_FALSE, camera.view().data());
+	glUniformMatrix4fv(uModel, 1, GL_FALSE, transform.data());
 
 	GLfloat white[4] = { 1, 1, 1, 1 };
 	glUniform4fv(uColor, 1, white);
 
-	glUniformMatrix4fv(uMVP, 1, GL_FALSE, mat.data());
 
 	glEnableVertexAttribArray(aPos);
 
@@ -258,7 +264,103 @@ void drawTriMeshWireframe(const Camera& camera, const Matrix& transform, const T
 	glDrawArrays(GL_LINES, 0, vertices.size() / 3);
 }
 
-void drawTriMesh(const Camera& camera, const LightInfo& lights, const Matrix& transform, const TriMeshData&)
+GLuint basicProgram()
 {
+	static GLuint prog;
+	static std::once_flag once;
+	std::call_once(once, [] {
+		const GLchar* vertSource =
+			"attribute mediump vec3 pos;"
+			"attribute mediump vec3 normal;"
+			"uniform mediump mat4 projection;"
+			"uniform mediump mat4 view;"
+			"uniform mediump mat4 model;"
+			"varying mediump vec3 norm;"
+			"void main() {"
+			"	vec4 tmp = projection * view * model * vec4(pos, 1.0);"
+			"   norm = vec4(normal, 1.0);"
+			"	gl_Position = tmp;"
+			"}";
 
+		const GLchar* fragSource =
+			"uniform mediump vec4 color;"
+			"varying mediump vec3 norm;"
+			"void main() {"
+			"	gl_FragColor = norm;"
+			"}";
+
+		prog = glCreateProgram();
+		auto vert = compileShader(GL_VERTEX_SHADER, vertSource);
+		auto frag = compileShader(GL_FRAGMENT_SHADER, fragSource);
+		glAttachShader(prog, vert);
+		glAttachShader(prog, frag);
+		glLinkProgram(prog);
+		glDeleteShader(vert);
+		glDeleteShader(frag);
+		});
+	return prog;
+}
+
+
+void drawTriMesh(const Camera& camera, const LightInfo& lights, const Matrix& transform, const TriMeshData& data)
+{
+	auto prog = basicProgram();
+	glUseProgram(prog);
+
+	static GLint aPos = glGetAttribLocation(prog, "pos");
+	static GLint aNormal = glGetAttribLocation(prog, "normal");
+	static GLint uProjection = glGetUniformLocation(prog, "projection");
+	static GLint uView = glGetUniformLocation(prog, "view");
+	static GLint uModel = glGetUniformLocation(prog, "model");
+	static GLint uColor = glGetUniformLocation(prog, "color");
+
+	glUniformMatrix4fv(uProjection, 1, GL_FALSE, camera.projection().data());
+	glUniformMatrix4fv(uView, 1, GL_FALSE, camera.view().data());
+	glUniformMatrix4fv(uModel, 1, GL_FALSE, transform.data());
+
+	GLfloat white[4] = { 1, 1, 1, 1 };
+	glUniform4fv(uColor, 1, white);
+
+
+	glEnableVertexAttribArray(aPos);
+
+	size_t numTriangles = data.indices.size() / 3;
+	std::vector<GLfloat> vertices(numTriangles * 3 * 3);
+	auto ptr = vertices.data();
+	for (size_t i = 0; i < numTriangles; i++) {
+		int idx[3] = {
+			data.indices[3 * i + 0],
+			data.indices[3 * i + 1],
+			data.indices[3 * i + 2]
+		};
+
+		*ptr++ = data.vertices[3 * idx[0] + 0];
+		*ptr++ = data.vertices[3 * idx[0] + 1];
+		*ptr++ = data.vertices[3 * idx[0] + 2];
+		*ptr++ = data.vertices[3 * idx[1] + 0];
+		*ptr++ = data.vertices[3 * idx[1] + 1];
+		*ptr++ = data.vertices[3 * idx[1] + 2];
+		*ptr++ = data.vertices[3 * idx[2] + 0];
+		*ptr++ = data.vertices[3 * idx[2] + 1];
+		*ptr++ = data.vertices[3 * idx[2] + 2];
+	}
+
+	glVertexAttribPointer(aPos, 3, GL_FLOAT, GL_FALSE, 0, vertices.data());
+
+	glEnableVertexAttribArray(aNormal);
+	std::vector<GLfloat> normals(numTriangles * 3 * 3);
+	ptr = normals.data();
+	for (size_t i = 0; i < numTriangles; i++) {
+		auto normal = data.normals.data() + 3 * i;
+
+		for (size_t j = 0; j < 3; j++) {
+			*ptr++ = normal[0];
+			*ptr++ = normal[1];
+			*ptr++ = normal[2];
+		}
+	}
+
+	glVertexAttribPointer(aNormal, 3, GL_FLOAT, GL_FALSE, 0, normals.data());
+
+	glDrawArrays(GL_TRIANGLES, 0, vertices.size() / 9);
 }

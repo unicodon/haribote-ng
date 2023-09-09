@@ -10,7 +10,7 @@ class Camera;
 struct LightInfo;
 
 GLuint compileShader(GLuint shaderType, const GLchar* source);
-GLuint commonProgram();
+GLuint wireframeProgram();
 
 void drawAxes(const Camera& camera, const Matrix& transform);
 void drawBoxWireframe(const Camera& camera, const Matrix& transform);
