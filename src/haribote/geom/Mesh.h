@@ -9,17 +9,24 @@ class dTriMesh : public dGeom {
     dTriMesh(dTriMesh&);
     void operator= (dTriMesh&);
 
+    dTriMeshDataID m_triMeshData;
+
 public:
     dTriMesh(dSpaceID space, const TriMeshData& data)
     {
-        dTriMeshDataID g = dGeomTriMeshDataCreate();
+        m_triMeshData = dGeomTriMeshDataCreate();
 #if defined(dSINGLE)
-        dGeomTriMeshDataBuildSingle(g, data.vertices.data(), 3 * sizeof(dReal), data.vertices.size() / 3, data.indices.data(), data.indices.size() / 3, 3 * sizeof(int));
+#define dGeomTriMeshDataBuildReal dGeomTriMeshDataBuildSingle
 #else
-        dGeomTriMeshDataBuildDouble1(g, data.vertices.data(), 3 * sizeof(dReal), data.vertices.size() / 3, data.indices.data(), data.indices.size() / 3, 3 * sizeof(int), data.normals.data());
+#define dGeomTriMeshDataBuildReal dGeomTriMeshDataBuildDouble
 #endif
-        _id = dCreateTriMesh(space, g, nullptr, nullptr, nullptr);
-//        dGeomTriMeshDataDestroy(g);
+        dGeomTriMeshDataBuildReal(m_triMeshData, data.vertices.data(), 3 * sizeof(dReal), data.vertices.size() / 3, data.indices.data(), data.indices.size(), 3 * sizeof(int));
+        _id = dCreateTriMesh(space, m_triMeshData, nullptr, nullptr, nullptr);
+    }
+
+    ~dTriMesh()
+    {
+        dGeomTriMeshDataDestroy(m_triMeshData);
     }
 };
 

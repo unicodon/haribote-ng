@@ -75,21 +75,21 @@ const double ini_body_pos[][3] = {
 
 const char* geom_mesh_filename[] = {
 //	"mesh/draw_body_tail.x",
-	"mesh/draw_head_ear_eye.x",
+//	"mesh/draw_head_ear_eye.x",
 //	"mesh/draw_chin.x",
 
 	"mesh/geom_body.x",
 
-	"mesh/geom_head.x",
-	"mesh/draw_chin.x",
-	"mesh/geom_rf2.x",
-	"mesh/geom_rf3.x",
-	"mesh/geom_lf2.x",
-	"mesh/geom_lf3.x",
-	"mesh/geom_rh2.x",
-	"mesh/geom_rh3.x",
-	"mesh/geom_lh2.x",
-	"mesh/geom_lh3.x",
+	//"mesh/geom_head.x",
+	//"mesh/draw_chin.x",
+	//"mesh/geom_rf2.x",
+	//"mesh/geom_rf3.x",
+	//"mesh/geom_lf2.x",
+	//"mesh/geom_lf3.x",
+	//"mesh/geom_rh2.x",
+	//"mesh/geom_rh3.x",
+	//"mesh/geom_lh2.x",
+	//"mesh/geom_lh3.x",
 };
 
 
@@ -217,6 +217,17 @@ public:
 	{
 		m_paused = !m_paused;
 	}
+
+	void tilt(float rad) override
+	{
+		m_mainCamera.setTilt(m_mainCamera.getTilt() + rad);
+	}
+
+	void pan(float rad) override
+	{
+		m_mainCamera.setPan(m_mainCamera.getPan() + rad);
+	}
+
 
 	void initializeMainLights()
 	{

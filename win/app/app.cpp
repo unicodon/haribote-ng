@@ -281,6 +281,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         case 'p':
             g_world->pause();
             break;
+        case 'j':
+            g_world->pan(0.2f);
+            break;
+        case 'k':
+            g_world->pan(-0.2f);
+            break;
         default:
             break;
         }

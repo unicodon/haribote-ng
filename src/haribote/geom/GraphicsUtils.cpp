@@ -11,6 +11,23 @@ GLuint compileShader(GLuint shaderType, const GLchar* source)
 	GLuint shader = glCreateShader(shaderType);
 	glShaderSource(shader, 1, &source, nullptr);
 	glCompileShader(shader);
+	GLint isCompiled = 0;
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
+	if (isCompiled == GL_FALSE)
+	{
+		GLint maxLength = 0;
+		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+
+		// The maxLength includes the NULL character
+		std::vector<GLchar> errorLog(maxLength);
+		glGetShaderInfoLog(shader, maxLength, &maxLength, &errorLog[0]);
+
+		// Provide the infolog in whatever manor you deem best.
+		// Exit with failure.
+		glDeleteShader(shader); // Don't leak the shader.
+		return 0;
+	}
+
 	return shader;
 }
 
@@ -275,7 +292,7 @@ GLuint basicProgram()
 			"uniform mediump mat4 projection;"
 			"uniform mediump mat4 view;"
 			"uniform mediump mat4 model;"
-			"varying mediump vec3 norm;"
+			"varying mediump vec4 norm;"
 			"void main() {"
 			"	vec4 tmp = projection * view * model * vec4(pos, 1.0);"
 			"   norm = vec4(normal, 1.0);"
@@ -284,9 +301,9 @@ GLuint basicProgram()
 
 		const GLchar* fragSource =
 			"uniform mediump vec4 color;"
-			"varying mediump vec3 norm;"
+			"varying mediump vec4 norm;"
 			"void main() {"
-			"	gl_FragColor = norm;"
+			"	gl_FragColor = vec4(1.0, 1.0, 1.0, 0.1 );/*norm;*/"
 			"}";
 
 		prog = glCreateProgram();
@@ -295,6 +312,18 @@ GLuint basicProgram()
 		glAttachShader(prog, vert);
 		glAttachShader(prog, frag);
 		glLinkProgram(prog);
+		GLint isLinked = 0;
+		glGetProgramiv(prog, GL_LINK_STATUS, &isLinked);
+		if (isLinked == GL_FALSE)
+		{
+			GLint maxLength = 0;
+			glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &maxLength);
+
+			// The maxLength includes the NULL character
+			std::vector<GLchar> infoLog(maxLength);
+			glGetProgramInfoLog(prog, maxLength, &maxLength, &infoLog[0]);
+
+		}
 		glDeleteShader(vert);
 		glDeleteShader(frag);
 		});
@@ -362,5 +391,7 @@ void drawTriMesh(const Camera& camera, const LightInfo& lights, const Matrix& tr
 
 	glVertexAttribPointer(aNormal, 3, GL_FLOAT, GL_FALSE, 0, normals.data());
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDrawArrays(GL_TRIANGLES, 0, vertices.size() / 9);
 }

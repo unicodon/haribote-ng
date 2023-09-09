@@ -64,7 +64,7 @@ TriMeshData createTriMeshData(Value&& source)
 
 		dReal vertices[9];
 		for (int j = 0; j < 3; j++) {
-			memcpy(vertices + 3 * j, data.vertices.data() + 3 * data.indices[3 * i + 0], 3 * sizeof(dReal));
+			memcpy(vertices + 3 * j, data.vertices.data() + 3 * data.indices[3 * i + j], 3 * sizeof(dReal));
 		}
 
 		calculateNormal(data.normals.data() + 3 * i, vertices);

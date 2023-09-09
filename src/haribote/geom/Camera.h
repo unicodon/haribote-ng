@@ -14,6 +14,9 @@ public:
 	void setTilt(float rad);
 	void setPan(float rad);
 
+	float getTilt() const { return m_tilt; }
+	float getPan() const { return m_pan; }
+
 	void setPosition(const Vector&);
 	void setPosition(float x, float y, float z)
 	{
