@@ -4,7 +4,7 @@
 #include <string>
 #include <fstream>
 
-#include "GraphicsUtils.h"
+#include "../graphics/GraphicsUtils.h"
 
 #include "../util/Json.h"
 
@@ -938,6 +938,7 @@ void exportMeshData(const char* path, MeshData opaque)
 				}
 				break;
 				default:
+					__debugbreak();
 					break;
 				}
 			}

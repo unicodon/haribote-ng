@@ -120,7 +120,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level1</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
@@ -135,7 +135,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level1</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
@@ -154,15 +154,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\haribote\geom\Box.h" />
-    <ClInclude Include="..\..\src\haribote\geom\Camera.h" />
     <ClInclude Include="..\..\src\haribote\geom\Geom.h" />
-    <ClInclude Include="..\..\src\haribote\geom\GraphicsUtils.h" />
-    <ClInclude Include="..\..\src\haribote\geom\Light.h" />
     <ClInclude Include="..\..\src\haribote\geom\Mesh.h" />
     <ClInclude Include="..\..\src\haribote\geom\MeshLoader.h" />
     <ClInclude Include="..\..\src\haribote\geom\ODEUtils.h" />
     <ClInclude Include="..\..\src\haribote\geom\Sphere.h" />
     <ClInclude Include="..\..\src\haribote\geom\TriMeshData.h" />
+    <ClInclude Include="..\..\src\haribote\graphics\Camera.h" />
+    <ClInclude Include="..\..\src\haribote\graphics\DrawMesh.h" />
+    <ClInclude Include="..\..\src\haribote\graphics\GraphicsUtils.h" />
+    <ClInclude Include="..\..\src\haribote\graphics\Light.h" />
     <ClInclude Include="..\..\src\haribote\math\MatrixUtils.h" />
     <ClInclude Include="..\..\src\haribote\obj\BoxObject.h" />
     <ClInclude Include="..\..\src\haribote\soccer\Ball.h" />
@@ -173,13 +174,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\haribote\geom\Box.cpp" />
-    <ClCompile Include="..\..\src\haribote\geom\Camera.cpp" />
-    <ClCompile Include="..\..\src\haribote\geom\GraphicsUtils.cpp" />
     <ClCompile Include="..\..\src\haribote\geom\Mesh.cpp" />
     <ClCompile Include="..\..\src\haribote\geom\MeshLoader.cpp" />
     <ClCompile Include="..\..\src\haribote\geom\ODEUtils.cpp" />
     <ClCompile Include="..\..\src\haribote\geom\Sphere.cpp" />
     <ClCompile Include="..\..\src\haribote\geom\TriMeshData.cpp" />
+    <ClCompile Include="..\..\src\haribote\graphics\Camera.cpp" />
+    <ClCompile Include="..\..\src\haribote\graphics\DrawMesh.cpp" />
+    <ClCompile Include="..\..\src\haribote\graphics\GraphicsUtils.cpp" />
     <ClCompile Include="..\..\src\haribote\obj\BoxObject.cpp" />
     <ClCompile Include="..\..\src\haribote\soccer\Ball.cpp" />
     <ClCompile Include="..\..\src\haribote\soccer\Field.cpp" />

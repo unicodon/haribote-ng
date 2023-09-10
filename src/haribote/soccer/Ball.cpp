@@ -1,6 +1,6 @@
 #include "Ball.h"
 
-#include "../geom/GraphicsUtils.h"
+#include "../graphics/GraphicsUtils.h"
 #include "../geom/ODEUtils.h"
 
 const dReal BallRadius = 0.04;

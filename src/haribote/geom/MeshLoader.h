@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "Camera.h"
+#include "../graphics/Camera.h"
 #include "../util/Value.h"
 
 using MeshData = void*;

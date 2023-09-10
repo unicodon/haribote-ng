@@ -427,7 +427,7 @@ template<class W> void stringifyValue(W& w, const Value& in)
 template<class W> void stringifyInt(W& w, Value::Int in)
 {
 	char buf[64];
-	int n = snprintf(buf, sizeof(buf), "%ld", in);
+	int n = snprintf(buf, sizeof(buf), "%d", in);
 	return w.write(buf, n);
 }
 

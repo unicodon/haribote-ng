@@ -1,6 +1,6 @@
 #include "Box.h"
 
-#include "GraphicsUtils.h"
+#include "../graphics/GraphicsUtils.h"
 #include "ODEUtils.h"
 
 Box::Box(dReal lx, dReal ly, dReal lz, dSpaceID space)
@@ -8,18 +8,23 @@ Box::Box(dReal lx, dReal ly, dReal lz, dSpaceID space)
 {
 }
 
-void Box::drawWireframe(const Camera& camera)
+void Box::draw(unsigned drawFlags, const Camera& camera, const LightInfo& lights)
 {
-	dVector3 length;
-	m_geom.getLengths(length);
+	if (drawFlags & DrawGeomAxes) {
+		Matrix mat = getRotPos(m_geom);
+		drawAxes(camera, mat);
+	}
 
-	Matrix mat = getRotPos(m_geom);
+	if (drawFlags & DrawGeomWireframe) {
+		dVector3 length;
+		m_geom.getLengths(length);
 
-	drawAxes(camera, mat);
+		Matrix mat = getRotPos(m_geom);
 
-	mat.scaleX(length[0]);
-	mat.scaleY(length[1]);
-	mat.scaleZ(length[2]);
+		mat.scaleX(length[0]);
+		mat.scaleY(length[1]);
+		mat.scaleZ(length[2]);
 
-	drawBoxWireframe(camera, mat);
+		drawBoxWireframe(camera, mat);
+	}
 }

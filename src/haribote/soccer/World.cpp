@@ -3,7 +3,7 @@
 #include <ode/ode.h>
 #include <ode/odecpp.h>
 #include "../geom/Geom.h"
-#include "../geom/GraphicsUtils.h"
+#include "../graphics/GraphicsUtils.h"
 #include "../obj/BoxObject.h"
 #include "Field.h"
 #include "Ball.h"
@@ -11,7 +11,8 @@
 #include "../geom/Mesh.h"
 
 #include "../geom/MeshLoader.h"
-#include "../geom/Light.h"
+#include "../graphics/Light.h"
+#include "../graphics/DrawMesh.h"
 
 #include <memory>
 #include <vector>
@@ -30,7 +31,6 @@ public:
 };
 
 const char* draw_mesh_filename[] = {
-//	"mesh/draw_chin.x",
 	"mesh/draw_body_tail.x",
 
 	"mesh/draw_head_ear_eye.x",
@@ -51,6 +51,9 @@ const char* draw_mesh_filename[] = {
 	"mesh/draw_lh3.x",
 };
 
+const char* new_mesh[] = {
+	"newmesh/out.json"
+};
 
 const double ini_body_pos[][3] = {
 	{	0.0,			0.0,		0.0},
@@ -96,52 +99,56 @@ const char* geom_mesh_filename[] = {
 struct Robot {
 public:
 	struct Part {
-		std::unique_ptr<Mesh> mesh;
+//		std::unique_ptr<Mesh> mesh;
+		DrawMesh drawMesh;
+		Vector pos;
+
+		Part(DrawMesh&& drawMesh, Vector&& pos) : drawMesh(std::move(drawMesh)), pos(std::move(pos)) {}
 	};
 
 	void load(dWorldID world, dSpaceID space)
 	{
-		for (auto path : geom_mesh_filename) {
-			Part part;
-			auto mesh = createTriMeshData(loadMeshData(path));
-			part.mesh = std::make_unique<Mesh>(space, std::move(mesh));
+		//for (auto path : geom_mesh_filename) {
+		//	Part part;
+		//	auto mesh = createTriMeshData(loadMeshData(path));
+		//	part.mesh = std::make_unique<Mesh>(space, std::move(mesh));
 
-			dBody* b = new dBody(world);
-			dMass mass;
-			mass.setBoxTotal(1, 0.1, 0.1, 0.1);
-			b->setMass(mass);
-			part.mesh->geom().setBody(*b);
-			part.mesh->geom().setPosition(0, 0, .5);
+		//	dBody* b = new dBody(world);
+		//	dMass mass;
+		//	mass.setBoxTotal(1, 0.1, 0.1, 0.1);
+		//	b->setMass(mass);
+		//	part.mesh->geom().setBody(*b);
+		//	part.mesh->geom().setPosition(0, 0, .5);
 
-			parts.push_back(std::move(part));
-			return;
-		}
+		//	parts.push_back(std::move(part));
+		//	return;
+		//}
+
+		int i = 0;
+		parts.emplace_back(DrawMesh(std::move(loadJsonMeshData("newmesh/out.json").asArray()[0])), Vector(ini_body_pos[i][0], ini_body_pos[i][1], ini_body_pos[i][2]));
 
 		//for (int i = 0; i < 16; i++) {
-		//	Part part;
-		//	part.mesh = loadMeshData(draw_mesh_filename[i]);
-		//	part.pos = Vector(ini_body_pos[i][0], ini_body_pos[i][1], ini_body_pos[i][2]);
-		//	parts.push_back(part);
+		//	parts.emplace_back(DrawMesh(loadMeshData(draw_mesh_filename[i])), Vector(ini_body_pos[i][0], ini_body_pos[i][1], ini_body_pos[i][2]));
 		//}
 
 	}
 
-	void draw(const Camera& camera, const LightInfo& lights)
+	void draw(unsigned drawFlags, const Camera& camera, const LightInfo& lights)
 	{
 		static int rot = 0;
 		rot++;
 		Matrix m;
-		m.scale(4);
-		m.rotateZ(rot * 4 * M_PI / 180);
+		m.scale(1);
+		m.rotateZ(rot * 1 * M_PI / 180);
 //		m.rotateZ(20 * M_PI / 180);
 		for (auto& part : parts) {
-			if (part.mesh) {
-				part.mesh->draw(camera, lights);
-//				part.mesh->drawWireframe(camera);
-			}
-//			Matrix mat = m;
-//			mat.translate(part.pos);
-//			drawMesh(camera, part.mesh, mat);
+			//if (part.mesh) {
+			//	part.mesh->draw(drawFlags, camera, lights);
+			//}
+			Matrix mat = m;
+			mat.translate(part.pos);
+			//drawTriMesh(camera, lights, mat, part.drawMesh);
+			part.drawMesh.draw(drawFlags, mat, camera, lights);
 			//drawTriMesh(camera, mat, part.tri);
 			//drawBoxWireframe(camera, mat);
 
@@ -203,14 +210,16 @@ public:
 
 		drawAxes(m_mainCamera, Matrix());
 
+		unsigned drawFlags = DrawGeomAxes | DrawGeomWireframe;
+
 		m_field.draw(m_mainCamera);
-		m_ball.drawWireframe(m_mainCamera);
+		m_ball.draw(drawFlags, m_mainCamera, m_mainLights);
 
 		for (auto& obj : m_objects) {
-			obj->drawWireframe(m_mainCamera);
+			obj->draw(drawFlags, m_mainCamera, m_mainLights);
 		}
 
-		robot->draw(m_mainCamera, m_mainLights);
+		robot->draw(drawFlags, m_mainCamera, m_mainLights);
 	}
 
 	void pause() override

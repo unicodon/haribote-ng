@@ -36,8 +36,7 @@ public:
 
 	dGeom& geom() override { return m_geom; }
     
-    void draw(const Camera&, const LightInfo& lights) override;
-    void drawWireframe(const Camera& camera) override;
+    void draw(unsigned drawFlags, const Camera&, const LightInfo& lights) override;
 
 protected:
     dTriMesh m_geom;

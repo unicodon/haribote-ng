@@ -1,21 +1,19 @@
 #include "Mesh.h"
 
-#include "GraphicsUtils.h"
+#include "../graphics/GraphicsUtils.h"
 #include "ODEUtils.h"
 
-void Mesh::draw(const Camera& camera, const LightInfo& lights)
+void Mesh::draw(unsigned drawFlags, const Camera& camera, const LightInfo& lights)
 {
 	Matrix mat = getRotPos(m_geom);
-
-	drawTriMesh(camera, lights, mat, m_data);
-}
-
-
-void Mesh::drawWireframe(const Camera& camera)
-{
-	Matrix mat = getRotPos(m_geom);
-
-	drawAxes(camera, mat);
-
-	drawTriMeshWireframe(camera, mat, m_data);
+	
+	if (drawFlags & DrawGeom) {
+		drawTriMesh(camera, lights, mat, m_data);
+	}
+	if (drawFlags & DrawGeomAxes) {
+		drawAxes(camera, mat);
+	}
+	if (drawFlags & DrawGeomWireframe) {
+		drawTriMeshWireframe(camera, mat, m_data);
+	}
 }

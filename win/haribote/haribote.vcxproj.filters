@@ -16,6 +16,9 @@
     <Filter Include="util">
       <UniqueIdentifier>{bb4bff2a-fe33-4b8e-961a-1a930b3ffe2b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="graphics">
+      <UniqueIdentifier>{ae232099-77b4-406f-9c1c-6dadb9aa28f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\haribote\soccer\World.h">
@@ -29,12 +32,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\haribote\soccer\Ball.h">
       <Filter>soccer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\haribote\geom\Camera.h">
-      <Filter>geom</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\haribote\geom\GraphicsUtils.h">
-      <Filter>geom</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\haribote\geom\ODEUtils.h">
       <Filter>geom</Filter>
@@ -66,8 +63,17 @@
     <ClInclude Include="..\..\src\haribote\util\Value.h">
       <Filter>util</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\haribote\geom\Light.h">
-      <Filter>geom</Filter>
+    <ClInclude Include="..\..\src\haribote\graphics\GraphicsUtils.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\haribote\graphics\Camera.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\haribote\graphics\Light.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\haribote\graphics\DrawMesh.h">
+      <Filter>graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -79,12 +85,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\haribote\soccer\Ball.cpp">
       <Filter>soccer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\haribote\geom\Camera.cpp">
-      <Filter>geom</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\haribote\geom\GraphicsUtils.cpp">
-      <Filter>geom</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\haribote\geom\ODEUtils.cpp">
       <Filter>geom</Filter>
@@ -112,6 +112,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\haribote\geom\TriMeshData.cpp">
       <Filter>geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\haribote\graphics\GraphicsUtils.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\haribote\graphics\Camera.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\haribote\graphics\DrawMesh.cpp">
+      <Filter>graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

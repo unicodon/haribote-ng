@@ -1,6 +1,6 @@
 #include "Sphere.h"
 
-#include "GraphicsUtils.h"
+#include "../graphics/GraphicsUtils.h"
 #include "ODEUtils.h"
 
 Sphere::Sphere(dReal radius, dSpaceID space)
@@ -8,15 +8,20 @@ Sphere::Sphere(dReal radius, dSpaceID space)
 {
 }
 
-void Sphere::drawWireframe(const Camera& camera)
+void Sphere::draw(unsigned drawFlags, const Camera& camera, const LightInfo& lights)
 {
-	dReal radius = m_geom.getRadius();
+	if (drawFlags & DrawGeomAxes) {
+		Matrix mat = getRotPos(m_geom);
+		drawAxes(camera, mat);
+	}
 
-	Matrix mat = getRotPos(m_geom);
+	if (drawFlags & DrawGeomWireframe) {
+		dReal radius = m_geom.getRadius();
 
-	drawAxes(camera, mat);
+		Matrix mat = getRotPos(m_geom);
 
-	mat.scale(radius);
+		mat.scale(radius);
 
-	drawSphereWireframe(camera, mat);
+		drawSphereWireframe(camera, mat);
+	}
 }
