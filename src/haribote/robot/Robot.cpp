@@ -30,16 +30,19 @@ const double ini_body_pos[][3] = {
 	{	0.0675 + 0.0400,	0.0,		0.0800 + 0.0195 - 0.0175},
 	{	0.0675,			0.0,		0.0195},
 
-	{	0.0650,			-0.125 / 2,	0},
+	{	0.0650,			0 / 2,	0},
 	{	0.0650,			-0.125 / 2,	0},
 	{	0.0650 + 0.0078,	-0.1344 / 2,	-0.0695},
-	{	0.0650,			0.1250 / 2,	0},
+
+	{	0.0650,			0 / 2,	0},
 	{	0.0650,			0.1250 / 2,	0},
 	{	0.0650 + 0.0078,	0.1344 / 2,	-0.0695},
-	{	-0.0650,		-0.1250 / 2,	0},
+
+	{	-0.0650,		0 / 2,	0},
 	{	-0.0650,		-0.1250 / 2,	0},
 	{	-0.0728,		-0.1344 / 2,	-0.0695},
-	{	-0.0650,		0.1250 / 2,	0},
+
+	{	-0.0650,		0 / 2,	0},
 	{	-0.0650,		0.1250 / 2,	0},
 	{	-0.0728,		0.1344 / 2,	-0.0695},
 };
@@ -64,8 +67,26 @@ const char* geom_mesh_filename[] = {
 };
 
 const char* new_mesh_filename[] = {
-	"newmesh/body.json",
-	"newmesh/head.json",
+	"newmesh/draw_body.json",
+	"newmesh/draw_head.json",
+	"newmesh/draw_chops.json",
+	"newmesh/draw_neck.json",
+
+	"newmesh/draw_rf1.json",
+	"newmesh/draw_rf2.json",
+	"newmesh/draw_rf3.json",
+
+	"newmesh/draw_lf1.json",
+	"newmesh/draw_lf2.json",
+	"newmesh/draw_lf3.json",
+
+	"newmesh/draw_rh1.json",
+	"newmesh/draw_rh2.json",
+	"newmesh/draw_rh3.json",
+
+	"newmesh/draw_lh1.json",
+	"newmesh/draw_lh2.json",
+	"newmesh/draw_lh3.json",
 };
 
 Robot::Part::Part(const char* drawMeshPath, Vector pos)
@@ -83,7 +104,7 @@ void Robot::Part::draw(unsigned drawFlags, const Camera& camera, const LightInfo
 	rot++;
 	Matrix m;
 	m.scale(1);
-	m.rotateZ(rot * 1 * M_PI / 180);
+	m.rotateZ(rot * 0.1 * M_PI / 180);
 	//		m.rotateZ(20 * M_PI / 180);
 	for (auto& drawMesh : m_drawMeshes) {
 		//if (part.mesh) {
