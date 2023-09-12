@@ -13,8 +13,6 @@ public:
 	void draw(unsigned drawFlags, const Matrix& transform, const Camera& camera, const LightInfo& lights);
 
 private:
-	float m_baseColor[4];
-	float m_specular;
 	std::vector<int> m_indices;
 	std::vector<float> m_vertices;
 	std::vector<float> m_normals;

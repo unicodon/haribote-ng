@@ -37,19 +37,19 @@ GLuint wireframeProgram()
 	static std::once_flag once;
 	std::call_once(once, [] {
 		const GLchar* vertSource =
-			"attribute mediump vec3 pos;"
-			"uniform mediump mat4 projection;"
-			"uniform mediump mat4 view;"
-			"uniform mediump mat4 model;"
+			"attribute mediump vec3 aPos;"
+			"uniform mediump mat4 uProjection;"
+			"uniform mediump mat4 uView;"
+			"uniform mediump mat4 uModel;"
 			"void main() {"
-			"	vec4 tmp = projection * view * model * vec4(pos, 1.0);"
+			"	vec4 tmp = uProjection * uView * uModel * vec4(aPos, 1.0);"
 			"	gl_Position = tmp;"
 			"}";
 
 		const GLchar* fragSource =
-			"uniform mediump vec4 color;"
+			"uniform mediump vec4 uColor;"
 			"void main() {"
-			"	gl_FragColor = color;"
+			"	gl_FragColor = uColor;"
 			"}";
 
 		prog = glCreateProgram();
@@ -75,11 +75,11 @@ void drawAxes(const Camera& camera, const Matrix& transform)
 	auto prog = wireframeProgram();
 	glUseProgram(prog);
 
-	static GLint aPos = glGetAttribLocation(prog, "pos");
-	static GLint uProjection = glGetUniformLocation(prog, "projection");
-	static GLint uView = glGetUniformLocation(prog, "view");
-	static GLint uModel = glGetUniformLocation(prog, "model");
-	static GLint uColor = glGetUniformLocation(prog, "color");
+	static GLint aPos = glGetAttribLocation(prog, "aPos");
+	static GLint uProjection = glGetUniformLocation(prog, "uProjection");
+	static GLint uView = glGetUniformLocation(prog, "uView");
+	static GLint uModel = glGetUniformLocation(prog, "uModel");
+	static GLint uColor = glGetUniformLocation(prog, "uColor");
 
 	GLfloat red[4] = { 1, 0, 0, 1 };
 	GLfloat green[4] = { 0, 1, 0, 1 };
@@ -125,11 +125,11 @@ void drawBoxWireframe(const Camera& camera, const Matrix& transform)
 	auto prog = wireframeProgram();
 	glUseProgram(prog);
 
-	static GLint aPos = glGetAttribLocation(prog, "pos");
-	static GLint uProjection = glGetUniformLocation(prog, "projection");
-	static GLint uView = glGetUniformLocation(prog, "view");
-	static GLint uModel = glGetUniformLocation(prog, "model");
-	static GLint uColor = glGetUniformLocation(prog, "color");
+	static GLint aPos = glGetAttribLocation(prog, "aPos");
+	static GLint uProjection = glGetUniformLocation(prog, "uProjection");
+	static GLint uView = glGetUniformLocation(prog, "uView");
+	static GLint uModel = glGetUniformLocation(prog, "uModel");
+	static GLint uColor = glGetUniformLocation(prog, "uColor");
 
 	GLfloat white[4] = { 1, 1, 1, 1 };
 	glUniform4fv(uColor, 1, white);
@@ -176,11 +176,11 @@ void drawSphereWireframe(const Camera& camera, const Matrix& transform)
 	auto prog = wireframeProgram();
 	glUseProgram(prog);
 
-	static GLint aPos = glGetAttribLocation(prog, "pos");
-	static GLint uProjection = glGetUniformLocation(prog, "projection");
-	static GLint uView = glGetUniformLocation(prog, "view");
-	static GLint uModel = glGetUniformLocation(prog, "model");
-	static GLint uColor = glGetUniformLocation(prog, "color");
+	static GLint aPos = glGetAttribLocation(prog, "aPos");
+	static GLint uProjection = glGetUniformLocation(prog, "uProjection");
+	static GLint uView = glGetUniformLocation(prog, "uView");
+	static GLint uModel = glGetUniformLocation(prog, "uModel");
+	static GLint uColor = glGetUniformLocation(prog, "uColor");
 
 	glUniformMatrix4fv(uProjection, 1, GL_FALSE, camera.projection().data());
 	glUniformMatrix4fv(uView, 1, GL_FALSE, camera.view().data());
@@ -229,11 +229,11 @@ void drawTriMeshWireframe(const Camera& camera, const Matrix& transform, const T
 	auto prog = wireframeProgram();
 	glUseProgram(prog);
 
-	static GLint aPos = glGetAttribLocation(prog, "pos");
-	static GLint uProjection = glGetUniformLocation(prog, "projection");
-	static GLint uView = glGetUniformLocation(prog, "view");
-	static GLint uModel = glGetUniformLocation(prog, "model");
-	static GLint uColor = glGetUniformLocation(prog, "color");
+	static GLint aPos = glGetAttribLocation(prog, "aPos");
+	static GLint uProjection = glGetUniformLocation(prog, "uProjection");
+	static GLint uView = glGetUniformLocation(prog, "uView");
+	static GLint uModel = glGetUniformLocation(prog, "uModel");
+	static GLint uColor = glGetUniformLocation(prog, "uColor");
 
 	glUniformMatrix4fv(uProjection, 1, GL_FALSE, camera.projection().data());
 	glUniformMatrix4fv(uView, 1, GL_FALSE, camera.view().data());

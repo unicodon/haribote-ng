@@ -19,6 +19,9 @@
     <Filter Include="graphics">
       <UniqueIdentifier>{ae232099-77b4-406f-9c1c-6dadb9aa28f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="robot">
+      <UniqueIdentifier>{e9461a71-df9e-45c5-b237-b53cf378ebc8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\haribote\soccer\World.h">
@@ -75,6 +78,9 @@
     <ClInclude Include="..\..\src\haribote\graphics\DrawMesh.h">
       <Filter>graphics</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\haribote\robot\Robot.h">
+      <Filter>robot</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\haribote\soccer\World.cpp">
@@ -121,6 +127,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\haribote\graphics\DrawMesh.cpp">
       <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\haribote\robot\Robot.cpp">
+      <Filter>robot</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

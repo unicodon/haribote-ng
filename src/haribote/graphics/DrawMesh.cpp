@@ -4,23 +4,23 @@
 #include <math.h>
 #include <mutex>
 
-static void calculateNormal(float* normal /* vec3 */, const float* vertices /* vec3 * 3 */)
+static void calculateNormal(float* normal /* vec3 */, const float* vert0, const float* vert1, const float* vert2)
 {
 	float v1[3] = {
-		vertices[0] - vertices[6],
-		vertices[1] - vertices[7],
-		vertices[2] - vertices[8]
+		vert0[0] - vert2[0],
+		vert0[1] - vert2[1],
+		vert0[2] - vert2[2]
 	};
 	float v2[3] = {
-		vertices[3] - vertices[6],
-		vertices[4] - vertices[7],
-		vertices[5] - vertices[8]
+		vert1[0] - vert2[0],
+		vert1[1] - vert2[1],
+		vert1[2] - vert2[2]
 	};
 
 	float prod[3] = {
-		(v1[1] - v2[2]) * (v1[2] - v2[1]),
-		(v1[2] - v2[0]) * (v1[0] - v2[2]),
-		(v1[0] - v2[1]) * (v1[1] - v2[0])
+		v1[1] * v2[2] - v1[2] * v2[1],
+		v1[2] * v2[0] - v1[0] * v2[2],
+		v1[0] * v2[1] - v1[1] * v2[0]
 	};
 
 	float len = sqrt(prod[0] * prod[0] + prod[1] * prod[1] + prod[2] * prod[2]);
@@ -56,16 +56,12 @@ DrawMesh::DrawMesh(Value&& source)
 	for (size_t i = 0; i < numTriangles * 3; i++) {
 		m_indices[i] = faceVertices[i].asNumber();
 	}
-	for (size_t i = 0; i < numTriangles; i+=3) {
-		calculateNormal(m_normals.data() + i, m_vertices.data() + i);
+	for (size_t i = 0; i < numTriangles; i++) {
+		float* vert0 = m_vertices.data() + m_indices[i * 3 + 0] * 3;
+		float* vert1 = m_vertices.data() + m_indices[i * 3 + 1] * 3;
+		float* vert2 = m_vertices.data() + m_indices[i * 3 + 2] * 3;
+		calculateNormal(m_normals.data() + i * 3, vert0, vert1, vert2);
 	}
-
-	auto& baseColor = mesh["baseColor"].asArray();
-	for (size_t i = 0; i < 4; i++) {
-		m_baseColor[i] = baseColor[i].asNumber();
-	}
-
-	m_specular = mesh["specular"].asNumber();
 }
 
 GLuint basicProgram()
@@ -74,23 +70,23 @@ GLuint basicProgram()
 	static std::once_flag once;
 	std::call_once(once, [] {
 		const GLchar* vertSource =
-			"attribute mediump vec3 pos;"
-			"attribute mediump vec3 normal;"
-			"uniform mediump mat4 projection;"
-			"uniform mediump mat4 view;"
-			"uniform mediump mat4 model;"
-			"varying mediump vec4 norm;"
+			"attribute mediump vec3 aPos;"
+			"attribute mediump vec3 aNormal;"
+			"uniform mediump mat4 uProjection;"
+			"uniform mediump mat4 uView;"
+			"uniform mediump mat4 uModel;"
+			"varying mediump vec3 norm;"
 			"void main() {"
-			"	vec4 tmp = projection * view * model * vec4(pos, 1.0);"
-			"   norm = vec4(normal, 1.0);"
+			"	vec4 tmp = uProjection * uView * uModel * vec4(aPos, 1.0);"
+			"   norm = aNormal + vec3(0.5,0.5,0.5);"
 			"	gl_Position = tmp;"
 			"}";
 
 		const GLchar* fragSource =
-			"uniform mediump vec4 color;"
-			"varying mediump vec4 norm;"
+			"uniform mediump vec4 uColor;"
+			"varying mediump vec3 norm;"
 			"void main() {"
-			"	gl_FragColor = color;/*norm;*/"
+			"	gl_FragColor = vec4(norm, 0.8);"
 			"}";
 
 		prog = glCreateProgram();
@@ -123,18 +119,19 @@ void DrawMesh::draw(unsigned drawFlags, const Matrix& transform, const Camera& c
 	auto prog = basicProgram();
 	glUseProgram(prog);
 
-	static GLint aPos = glGetAttribLocation(prog, "pos");
-	static GLint aNormal = glGetAttribLocation(prog, "normal");
-	static GLint uProjection = glGetUniformLocation(prog, "projection");
-	static GLint uView = glGetUniformLocation(prog, "view");
-	static GLint uModel = glGetUniformLocation(prog, "model");
-	static GLint uColor = glGetUniformLocation(prog, "color");
+	static GLint aPos = glGetAttribLocation(prog, "aPos");
+	static GLint aNormal = glGetAttribLocation(prog, "aNormal");
+	static GLint uProjection = glGetUniformLocation(prog, "uProjection");
+	static GLint uView = glGetUniformLocation(prog, "uView");
+	static GLint uModel = glGetUniformLocation(prog, "uModel");
+	static GLint uColor = glGetUniformLocation(prog, "uColor");
 
 	glUniformMatrix4fv(uProjection, 1, GL_FALSE, camera.projection().data());
 	glUniformMatrix4fv(uView, 1, GL_FALSE, camera.view().data());
 	glUniformMatrix4fv(uModel, 1, GL_FALSE, transform.data());
 
-	glUniform4fv(uColor, 1, m_baseColor);
+	GLfloat white[4] = { 1, 1, 1, 1 };
+	glUniform4fv(uColor, 1, white);
 
 	glEnableVertexAttribArray(aPos);
 
@@ -165,7 +162,7 @@ void DrawMesh::draw(unsigned drawFlags, const Matrix& transform, const Camera& c
 	std::vector<GLfloat> normals(numTriangles * 3 * 3);
 	ptr = normals.data();
 	for (size_t i = 0; i < numTriangles; i++) {
-		auto normal = m_normals.data() + 3 * i;
+		auto normal = m_normals.data() +  i * 3;
 
 		for (size_t j = 0; j < 3; j++) {
 			*ptr++ = normal[0];
@@ -176,10 +173,10 @@ void DrawMesh::draw(unsigned drawFlags, const Matrix& transform, const Camera& c
 
 	glVertexAttribPointer(aNormal, 3, GL_FLOAT, GL_FALSE, 0, normals.data());
 
-	glDisable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glDrawArrays(GL_TRIANGLES, 0, vertices.size() / 3);
+	glDrawArrays(GL_TRIANGLES, 0, numTriangles * 3);
 
 	drawAxes(camera, transform);
 }

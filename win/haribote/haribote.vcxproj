@@ -166,6 +166,7 @@
     <ClInclude Include="..\..\src\haribote\graphics\Light.h" />
     <ClInclude Include="..\..\src\haribote\math\MatrixUtils.h" />
     <ClInclude Include="..\..\src\haribote\obj\BoxObject.h" />
+    <ClInclude Include="..\..\src\haribote\robot\Robot.h" />
     <ClInclude Include="..\..\src\haribote\soccer\Ball.h" />
     <ClInclude Include="..\..\src\haribote\soccer\Field.h" />
     <ClInclude Include="..\..\src\haribote\soccer\World.h" />
@@ -183,6 +184,7 @@
     <ClCompile Include="..\..\src\haribote\graphics\DrawMesh.cpp" />
     <ClCompile Include="..\..\src\haribote\graphics\GraphicsUtils.cpp" />
     <ClCompile Include="..\..\src\haribote\obj\BoxObject.cpp" />
+    <ClCompile Include="..\..\src\haribote\robot\Robot.cpp" />
     <ClCompile Include="..\..\src\haribote\soccer\Ball.cpp" />
     <ClCompile Include="..\..\src\haribote\soccer\Field.cpp" />
     <ClCompile Include="..\..\src\haribote\soccer\World.cpp" />

@@ -1,0 +1,11 @@
+BlenderでLWOを整形する。
+https://github.com/nangtani/blender-import-lwo
+のaddonを使う。
+
+元のLWOは基本的に面を反転する必要がある。
+一部さらにFace単位で反転する必要があるものがある。
+Faceを表示して確認する。
+
+四角形ポリゴンもあるため、三角形にする。
+ctrl+T
+
