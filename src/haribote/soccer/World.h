@@ -12,6 +12,9 @@ public:
 
 	virtual void tilt(float rad) = 0;
 	virtual void pan(float rad) = 0;
-	
+	virtual void startDrag(double screenX, double screenY) = 0;
+	virtual void drag(double screenX, double screenY) = 0;
+	virtual void endDrag() = 0;
+
 	static std::unique_ptr<World> create();
 };

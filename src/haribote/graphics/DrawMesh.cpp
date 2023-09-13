@@ -174,7 +174,9 @@ void DrawMesh::draw(unsigned drawFlags, const Matrix& transform, const Camera& c
 	glVertexAttribPointer(aNormal, 3, GL_FLOAT, GL_FALSE, 0, normals.data());
 
 	glEnable(GL_CULL_FACE);
-	glEnable(GL_BLEND);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	glDisable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDrawArrays(GL_TRIANGLES, 0, numTriangles * 3);
 

@@ -189,6 +189,8 @@ void drawSphereWireframe(const Camera& camera, const Matrix& transform, const fl
 	GLfloat white[4] = { 1, 1, 1, 1 };
 	glUniform4fv(uColor, 1, color ? color : white);
 
+	glDisable(GL_DEPTH_TEST);
+
 	glEnableVertexAttribArray(aPos);
 
 	const int NDIV = 16;

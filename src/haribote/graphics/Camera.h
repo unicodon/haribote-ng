@@ -28,6 +28,9 @@ public:
 		lookAt(Vector(x, y, z));
 	}
 
+	float getFov() const { return fov; }
+	float getAspect() const { return aspect; }
+
 protected:
 	void updateViewMatrix();
 

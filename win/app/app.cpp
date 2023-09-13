@@ -121,6 +121,8 @@ EGLConfig config()
     attr.push_back(8);
     attr.push_back(EGL_BLUE_SIZE);
     attr.push_back(8);
+    attr.push_back(EGL_DEPTH_SIZE);
+    attr.push_back(8);
     attr.push_back(EGL_RENDERABLE_TYPE);
     attr.push_back(EGL_OPENGL_ES2_BIT);
     attr.push_back(EGL_SURFACE_TYPE);
@@ -168,10 +170,22 @@ public:
     }
 };
 
+static std::pair<double, double> calculateScreenPos(HWND hWnd, LPARAM lParam)
+{
+    double x = GET_X_LPARAM(lParam);
+    double y GET_Y_LPARAM(lParam);
+    RECT rect;
+    ::GetWindowRect(hWnd, &rect);
+    double w = rect.right - rect.left;
+    double h = rect.bottom - rect.top;
+    x -= rect.left ;
+    y -= rect.top;
+    return { x / w, y / h };
+}
+
 std::unique_ptr<Context> g_context;
 
 std::unique_ptr<World> g_world;
-
 
 //
 //   FUNCTION: InitInstance(HINSTANCE, int)
@@ -267,7 +281,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_TIMER:
         {
             glClearColor(0, 0, 0, 0);
-            glClear(GL_COLOR_BUFFER_BIT);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             if (g_world)
                 g_world->draw();
@@ -276,6 +290,24 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             eglSwapBuffers(display(), g_surface->m_surface);
         }
         break;
+    case WM_LBUTTONDOWN:
+    {
+        auto screenPos = calculateScreenPos(hWnd, lParam);
+        g_world->startDrag(screenPos.first, screenPos.second);
+        ::SetCapture(hWnd);
+        break;
+    }
+    case WM_LBUTTONUP:
+        g_world->endDrag();
+        ::ReleaseCapture();
+        break;
+    case WM_MOUSEMOVE:
+        if (wParam & MK_LBUTTON)
+        {
+            auto screenPos = calculateScreenPos(hWnd, lParam);
+            g_world->drag(screenPos.first, screenPos.second);
+            break;
+        }
     case WM_CHAR:
         switch (wParam) {
         case 'p':

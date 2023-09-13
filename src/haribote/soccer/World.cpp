@@ -58,7 +58,9 @@ public:
 		box->geom().setPosition(0, 0, 1);
 		m_objects.push_back(std::move(box));
 
-		m_mainCamera.setPosition(0.0, -0.3, 0.2);
+		m_cameraDist = 0.3;
+		m_cameraPosRad = -M_PI / 2;
+		m_mainCamera.setPosition(cos(m_cameraPosRad) * m_cameraDist, sin(m_cameraPosRad) * m_cameraDist, 0.2);
 		m_mainCamera.lookAt(0, 0, 0);
 
 		initializeMainLights();
@@ -109,7 +111,38 @@ public:
 
 	void pan(float rad) override
 	{
-		m_mainCamera.setPan(m_mainCamera.getPan() + rad);
+		m_cameraPosRad += rad;
+		m_mainCamera.setPosition(cos(m_cameraPosRad) * m_cameraDist, sin(m_cameraPosRad) * m_cameraDist, 0.2);
+	}
+
+	void startDrag(double screenX, double screenY) override
+	{
+		m_startDragPan = m_mainCamera.getPan();
+		m_startDragTilt = m_mainCamera.getTilt();
+		float tanY = tanf(m_mainCamera.getFov() * M_PI / 180);
+		float tanX = tanY * m_mainCamera.getAspect();
+
+		m_startDragTanX = tanX * -2 * (screenX - 0.5f);
+		m_startDragTanY = tanY * 2 * (screenY - 0.5f);
+	}
+
+	void drag(double screenX, double screenY) override
+	{
+		float tanY = tanf(m_mainCamera.getFov() * M_PI / 180);
+		float tanX = tanY * m_mainCamera.getAspect();
+		float dragTanX = tanX * -2 * (screenX - 0.5f);
+		float dragTanY = tanY * 2 * (screenY - 0.5f);
+		
+		float deltaPan = atan(dragTanX) - atan(m_startDragTanX);
+		float deltaTilt = atan(dragTanY) - atan(m_startDragTanY);
+
+		m_mainCamera.setPan(m_startDragPan + deltaPan);
+		m_mainCamera.setTilt(m_startDragTilt + deltaTilt);
+	}
+
+	void endDrag() override
+	{
+
 	}
 
 
@@ -179,6 +212,12 @@ private:
 	std::vector<std::unique_ptr<Geom>> m_objects;
 
 	Camera m_mainCamera;
+	float m_startDragTilt;
+	float m_startDragPan;
+	float m_startDragTanX;
+	float m_startDragTanY;
+	float m_cameraDist; // for debug
+	float m_cameraPosRad; // for debug
 
 	LightInfo m_mainLights;
 };
