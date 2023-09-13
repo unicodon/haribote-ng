@@ -36,7 +36,7 @@ static void calculateNormal(float* normal /* vec3 */, const float* vert0, const 
 	}
 }
 
-DrawMesh::DrawMesh(Value&& source)
+DrawMesh::DrawMesh(Value& source)
 {
 	auto& mesh = source.asObject();
 

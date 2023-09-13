@@ -44,8 +44,11 @@ public:
 		, m_field(m_world, m_space)
 		, m_ball(m_world, m_space)
 	{
+		Matrix transform;
+		transform.translate(0, 0, 0.1);
+
 		robot = new Robot;
-		robot->load(m_world, m_space);
+		robot->load(m_world, m_space, transform);
 
 		m_world.setGravity(0, 0, -9.8);
 
@@ -55,7 +58,7 @@ public:
 		box->geom().setPosition(0, 0, 1);
 		m_objects.push_back(std::move(box));
 
-		m_mainCamera.setPosition(0, -0.3, 0.2);
+		m_mainCamera.setPosition(0.0, -0.3, 0.2);
 		m_mainCamera.lookAt(0, 0, 0);
 
 		initializeMainLights();

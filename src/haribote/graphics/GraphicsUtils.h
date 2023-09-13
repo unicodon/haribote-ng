@@ -19,8 +19,8 @@ GLuint compileShader(GLuint shaderType, const GLchar* source);
 GLuint wireframeProgram();
 
 void drawAxes(const Camera& camera, const Matrix& transform);
-void drawBoxWireframe(const Camera& camera, const Matrix& transform);
-void drawSphereWireframe(const Camera& camera, const Matrix& transform);
-void drawTriMeshWireframe(const Camera& camera, const Matrix& transform, const TriMeshData&);
+void drawBoxWireframe(const Camera& camera, const Matrix& transform, const float* color = 0);
+void drawSphereWireframe(const Camera& camera, const Matrix& transform, const float* color = 0);
+void drawTriMeshWireframe(const Camera& camera, const Matrix& transform, const TriMeshData&, const float* color = 0);
 
 void drawTriMesh(const Camera& camera, const LightInfo& lights, const Matrix& transform, const TriMeshData&);

@@ -63,6 +63,13 @@ struct VectorBase {
 		return *this;
 	}
 
+	void translate(const VectorBase<T>& rhs)
+	{
+		vec[0] += rhs[0];
+		vec[1] += rhs[1];
+		vec[2] += rhs[2];
+	}
+
 	T& operator[](size_t idx) { return vec[idx]; }
 	const T& operator[](size_t idx) const { return vec[idx]; }
 };
@@ -98,7 +105,7 @@ struct MatrixBase {
 	VectorBase<T>& operator[](size_t idx) { return *reinterpret_cast<VectorBase<T>*>(mat + idx * 4); }
 	const VectorBase<T>& operator[](size_t idx) const { return *reinterpret_cast<const VectorBase<T>*>(mat + idx * 4); }
 
-	VectorBase<T> operator*(const VectorBase<T>& rhs)
+	VectorBase<T> operator*(const VectorBase<T>& rhs) const
 	{
 		VectorBase<T> vec;
 		for (int i = 0; i < 4; i++) {
@@ -110,7 +117,7 @@ struct MatrixBase {
 		return vec;
 	}
 
-	MatrixBase operator*(const MatrixBase& rhs)
+	MatrixBase operator*(const MatrixBase& rhs) const
 	{
 		MatrixBase mat;
 		for (int i = 0; i < 4; i++) {

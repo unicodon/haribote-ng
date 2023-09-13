@@ -4,4 +4,6 @@
 
 Value parseJson(const char* data, size_t size);
 Value parseJson(const std::string& str);
+Value parseJsonFile(const char* path);
 std::string stringify(const Value& value);
+

@@ -982,7 +982,7 @@ Value loadMeshData(const char* path)
 		std::string jsonPath = path;
 		jsonPath += ".json";
 		exportMeshData(jsonPath.c_str(), mesh);
-		return loadJsonMeshData(jsonPath.c_str());
+		return parseJsonFile(jsonPath.c_str());
 	}
 
 	return Value();
@@ -1114,33 +1114,4 @@ void drawMesh(const Camera& camera, Value& data, const Matrix& transform)
 		glVertexAttribPointer(aPos, 3, GL_FLOAT, GL_FALSE, 0, vert.data());
 		glDrawArrays(GL_LINES, 0, vert.size() / 3);
 	}
-}
-
-Value loadJsonMeshData(const char* path)
-{
-	FILE* f;
-	if (fopen_s(&f, path, "rb") == 0) {
-		std::vector<char> data;
-
-		const size_t BufSize = 16 * 1024;
-		std::vector<char> buf(BufSize);
-
-		while (true) {
-			auto read = fread(buf.data(), 1, buf.size(), f);
-			if (read < 0) {
-				fclose(f);
-				return Value{};
-			}
-			if (read == 0) {
-				break;
-			}
-
-			data.insert(data.end(), buf.begin(), buf.begin() + read);
-		}
-
-		fclose(f);
-		return parseJson(data.data(), data.size());
-	}
-
-	return Value{};
 }

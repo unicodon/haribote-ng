@@ -615,6 +615,35 @@ Value parseJson(const std::string& str)
 	return parseJson(str.data(), str.length());
 }
 
+Value parseJsonFile(const char* path)
+{
+	FILE* f;
+	if (fopen_s(&f, path, "rb") == 0) {
+		std::vector<char> data;
+
+		const size_t BufSize = 16 * 1024;
+		std::vector<char> buf(BufSize);
+
+		while (true) {
+			auto read = fread(buf.data(), 1, buf.size(), f);
+			if (read < 0) {
+				fclose(f);
+				return Value{};
+			}
+			if (read == 0) {
+				break;
+			}
+
+			data.insert(data.end(), buf.begin(), buf.begin() + read);
+		}
+
+		fclose(f);
+		return parseJson(data.data(), data.size());
+	}
+
+	return Value{};
+}
+
 std::string stringify(const Value& value)
 {
 	std::string str;

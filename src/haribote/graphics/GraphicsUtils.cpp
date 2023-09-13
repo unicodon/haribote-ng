@@ -120,7 +120,7 @@ void drawAxes(const Camera& camera, const Matrix& transform)
 	}
 }
 
-void drawBoxWireframe(const Camera& camera, const Matrix& transform)
+void drawBoxWireframe(const Camera& camera, const Matrix& transform, const float* color)
 {
 	auto prog = wireframeProgram();
 	glUseProgram(prog);
@@ -132,7 +132,7 @@ void drawBoxWireframe(const Camera& camera, const Matrix& transform)
 	static GLint uColor = glGetUniformLocation(prog, "uColor");
 
 	GLfloat white[4] = { 1, 1, 1, 1 };
-	glUniform4fv(uColor, 1, white);
+	glUniform4fv(uColor, 1, color ? color : white);
 
 	glUniformMatrix4fv(uProjection, 1, GL_FALSE, camera.projection().data());
 	glUniformMatrix4fv(uView, 1, GL_FALSE, camera.view().data());
@@ -171,7 +171,7 @@ void drawBoxWireframe(const Camera& camera, const Matrix& transform)
 	glDrawArrays(GL_LINES, 0, 24);
 }
 
-void drawSphereWireframe(const Camera& camera, const Matrix& transform)
+void drawSphereWireframe(const Camera& camera, const Matrix& transform, const float* color)
 {
 	auto prog = wireframeProgram();
 	glUseProgram(prog);
@@ -187,7 +187,7 @@ void drawSphereWireframe(const Camera& camera, const Matrix& transform)
 	glUniformMatrix4fv(uModel, 1, GL_FALSE, transform.data());
 
 	GLfloat white[4] = { 1, 1, 1, 1 };
-	glUniform4fv(uColor, 1, white);
+	glUniform4fv(uColor, 1, color ? color : white);
 
 	glEnableVertexAttribArray(aPos);
 
@@ -224,7 +224,7 @@ void drawSphereWireframe(const Camera& camera, const Matrix& transform)
 
 }
 
-void drawTriMeshWireframe(const Camera& camera, const Matrix& transform, const TriMeshData& data)
+void drawTriMeshWireframe(const Camera& camera, const Matrix& transform, const TriMeshData& data, const float* color)
 {
 	auto prog = wireframeProgram();
 	glUseProgram(prog);
@@ -240,7 +240,7 @@ void drawTriMeshWireframe(const Camera& camera, const Matrix& transform, const T
 	glUniformMatrix4fv(uModel, 1, GL_FALSE, transform.data());
 
 	GLfloat white[4] = { 1, 1, 1, 1 };
-	glUniform4fv(uColor, 1, white);
+	glUniform4fv(uColor, 1, color ? color : white);
 
 
 	glEnableVertexAttribArray(aPos);

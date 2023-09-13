@@ -8,7 +8,7 @@
 
 class DrawMesh {
 public:
-	DrawMesh(Value&& source);
+	DrawMesh(Value& source);
 
 	void draw(unsigned drawFlags, const Matrix& transform, const Camera& camera, const LightInfo& lights);
 
