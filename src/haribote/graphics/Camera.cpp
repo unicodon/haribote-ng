@@ -72,11 +72,12 @@ Matrix Camera::projection() const
 {
 	float tx = tan(fov * aspect * M_PI / 180);
 	float ty = tan(fov * M_PI / 180);
+	float zRange = zFar - zNear;
 	return Matrix {
 		1 / tx, 0, 0, 0,
 		0, 1 / ty, 0, 0,
-		0, 0, 1, -1,
-		0, 0, 0, 0,
+		0, 0, -zFar / zRange, -1,
+		0, 0, -zFar * zNear / zRange, 0,
 	};
 
 	//return Matrix {
