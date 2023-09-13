@@ -33,11 +33,66 @@
     },
     "rf2": {
       "drawmesh": "newmesh/draw_rf2.json",
-      "offset": [ 0.0650, -0.0625, 0.0 ]
+      "offset": [ 0.0650, -0.0625, 0.0 ],
+      "weight": 0.06,
+      "massOffset": [ 0, 0, -0.025 ]
     },
     "rf3": {
       "drawmesh": "newmesh/draw_rf3.json",
       "offset": [ 0.0728, -0.06725, -0.0695 ],
+      "weight": 0.08,
+      "massOffset": [ 0, 0, -0.025 ],
+      "geommesh": "hoge"
+    },
+    "lf1": {
+      "drawmesh": "newmesh/draw_lf1.json",
+      "offset": [ 0.0650, 0.0625, 0.0 ]
+    },
+    "lf2": {
+      "drawmesh": "newmesh/draw_lf2.json",
+      "offset": [ 0.0650, 0.0625, 0.0 ],
+      "weight": 0.06,
+      "massOffset": [ 0, 0, -0.025 ]
+    },
+    "lf3": {
+      "drawmesh": "newmesh/draw_lf3.json",
+      "offset": [ 0.0728, 0.06725, -0.0695 ],
+      "weight": 0.08,
+      "massOffset": [ 0, 0, -0.025 ],
+      "geommesh": "hoge"
+    },
+    "rh1": {
+      "drawmesh": "newmesh/draw_rh1.json",
+      "offset": [ -0.0650, -0.0625, 0.0 ]
+    },
+    "rh2": {
+      "drawmesh": "newmesh/draw_rh2.json",
+      "offset": [ -0.0650, -0.0625, 0.0 ],
+      "weight": 0.06,
+      "massOffset": [ 0, 0, -0.025 ]
+    },
+    "rh3": {
+      "drawmesh": "newmesh/draw_rh3.json",
+      "offset": [ -0.0728, -0.06725, -0.0695 ],
+      "weight": 0.08,
+      "massOffset": [ 0, 0, -0.025 ],
+      "geommesh": "hoge"
+    },
+    "lh1": {
+      "drawmesh": "newmesh/draw_lh1.json",
+      "offset": [ -0.0650, 0.0625, 0.0 ]
+    },
+    "lh2": {
+      "drawmesh": "newmesh/draw_lh2.json",
+      "offset": [ -0.0650, 0.0625, 0.0 ],
+      "weight": 0.06,
+      "massOffset": [ 0, 0, -0.025 ]
+    },
+    "lh3": {
+      "drawmesh": "newmesh/draw_lh3.json",
+      "offset": [ -0.0728, 0.06725, -0.0695 ],
+      "weight": 0.08,
+      "massOffset": [ 0, 0, -0.025 ],
       "geommesh": "hoge"
     }
   },
@@ -82,6 +137,60 @@
       "connect": [ "rf2", "rf3" ],
       "axis": [ 0, 1, 0 ],
       "anchor": [ 0.0728, -0.06725, -0.0695 ],
+      "angle_range": [ -25, 122 ]
+    },
+    "lf1": {
+      "connect": [ "body", "lf1" ],
+      "axis": [ 0, 1, 0 ],
+      "anchor": [ 0.0650, 0.0625, 0.0 ],
+      "angle_range": [ -115, 130 ]
+    },
+    "lf2": {
+      "connect": [ "lf1", "lf2" ],
+      "axis": [ -1, 0, 0 ],
+      "anchor": [ 0.0650, 0.0625, 0.0 ],
+      "angle_range": [ -15, 93 ]
+    },
+    "lf3": {
+      "connect": [ "lf2", "lf3" ],
+      "axis": [ 0, 1, 0 ],
+      "anchor": [ 0.0728, 0.06725, -0.0695 ],
+      "angle_range": [ -25, 122 ]
+    },
+    "rh1": {
+      "connect": [ "body", "rh1" ],
+      "axis": [ 0, -1, 0 ],
+      "anchor": [ -0.0650, -0.0625, 0.0 ],
+      "angle_range": [ -135, 120 ]
+    },
+    "rh2": {
+      "connect": [ "rh1", "rh2" ],
+      "axis": [ 1, 0, 0 ],
+      "anchor": [ -0.0650, -0.0625, 0.0 ],
+      "angle_range": [ -15, 93 ]
+    },
+    "rh3": {
+      "connect": [ "rh2", "rh3" ],
+      "axis": [ 0, -1, 0 ],
+      "anchor": [ -0.0728, -0.06725, -0.0695 ],
+      "angle_range": [ -25, 122 ]
+    },
+    "lh1": {
+      "connect": [ "body", "lh1" ],
+      "axis": [ 0, -1, 0 ],
+      "anchor": [ -0.0650, 0.0625, 0.0 ],
+      "angle_range": [ -135, 120 ]
+    },
+    "lh2": {
+      "connect": [ "lh1", "lh2" ],
+      "axis": [ -1, 0, 0 ],
+      "anchor": [ -0.0650, 0.0625, 0.0 ],
+      "angle_range": [ -15, 93 ]
+    },
+    "lh3": {
+      "connect": [ "lh2", "lh3" ],
+      "axis": [ 0, -1, 0 ],
+      "anchor": [ -0.0728, 0.06725, -0.0695 ],
       "angle_range": [ -25, 122 ]
     }
   }

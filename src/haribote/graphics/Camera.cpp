@@ -79,11 +79,4 @@ Matrix Camera::projection() const
 		0, 0, -zFar / zRange, -1,
 		0, 0, -zFar * zNear / zRange, 0,
 	};
-
-	//return Matrix {
-	//	0.2, 0, 0, 0,
-	//	0, 0.5, 0, 0,
-	//	0, 0, 0, 0,
-	//	0, 0, 0.5, 1,
-	//};
 }
