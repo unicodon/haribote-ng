@@ -130,7 +130,7 @@ Robot::Part::Part(dWorldID world, dSpaceID space, Value::Object& desc, const Mat
 
 	auto geommesh = desc.find("geommesh");
 	if (geommesh != desc.end()) {
-		m_geom = std::make_unique<Sphere>(0.01, space);
+		m_geom = std::make_unique<Sphere>(0.02, space);
 		m_geom->geom().setBody(m_body);
 	}
 
@@ -195,6 +195,40 @@ Robot::Joint::Joint(dWorldID world, dBody& body0, dBody& body1, Value::Object& d
 	m_joint.setParam(dParamLoStop, range[0] * M_PI / 180);
 	m_joint.setParam(dParamHiStop, range[1] * M_PI / 180);
 
+	m_pid = toVector(desc["pid"]);
+
+	m_torque = desc["torque"].asNumber();
+}
+
+void Robot::Joint::update(dReal interval)
+{
+	dReal angle = m_joint.getAngle();
+	dReal diff = m_targetAngle - angle;
+	dReal delta = angle - m_lastAngle;
+	m_lastAngle = angle;
+	m_integralAngle += diff * interval;
+
+	dReal pGain = m_pid[0];
+	dReal iGain = m_pid[1];
+	dReal dGain = m_pid[2];
+	dReal torque = pGain * diff - (dGain + 15) * 0.06 * delta / interval + iGain * 0.1 * m_integralAngle;
+
+	torque *= 0.6 * m_torque;
+
+	if (fabs(diff) < 2.0 * M_PI / 180) {
+		torque = 0;
+	}
+	const dReal torqueLimit = 0.9;
+	torque = std::max(-torqueLimit, torque);
+	torque = std::min(torque, torqueLimit);
+
+	m_joint.addTorque(torque);
+}
+
+void Robot::Joint::debug()
+{
+	auto v = m_integralAngle;
+	auto x = m_targetAngle;
 }
 
 void Robot::Joint::draw(unsigned drawFlags, const Camera& camera, const LightInfo& lights)
@@ -259,6 +293,14 @@ void Robot::load(dWorldID world, dSpaceID space, const Matrix& transform)
 	//	parts.emplace_back(DrawMesh(loadMeshData(draw_mesh_filename[i])), Vector(ini_body_pos[i][0], ini_body_pos[i][1], ini_body_pos[i][2]));
 	//}
 
+}
+
+void Robot::update(dReal interval)
+{
+	for (auto& it : m_joints) {
+		it.second->update(interval);
+	}
+	m_joints["rf1"]->debug();
 }
 
 void Robot::draw(unsigned drawFlags, const Camera& camera, const LightInfo& lights)

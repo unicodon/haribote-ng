@@ -74,12 +74,18 @@ public:
 	void draw() override
 	{
 		if (!m_paused) {
-			dSpaceCollide(m_space, this, nearCallback);
+			double interval = 0.002;
+			for (int i = 0; i < 10; i++) {
+				dSpaceCollide(m_space, this, nearCallback);
+				robot->update(interval);
+				m_world.step(interval);
+				m_contactGroup.empty();
+			}
 
-			m_world.step(0.002);
-
-			m_contactGroup.empty();
 		}
+
+		GLfloat green[4] = { 0, 1, 0, 1 };
+		drawPlaneWireframe(m_mainCamera, Matrix(), green);
 
 		//static int rot = 0;
 		//rot++;

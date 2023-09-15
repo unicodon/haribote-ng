@@ -101,97 +101,129 @@
       "connect": [ "body", "neck_root" ],
       "axis": [ 0, 1, 0 ],
       "anchor": [ 0.0675, 0.0, 0.0195 ],
-      "angle_range": [ -75, 5 ]
+      "angle_range": [ -75, 5 ],
+      "torque": 0.15,
+      "pid": [ 10, 4, 2 ]
     },
     "pan": {
       "connect": [ "neck_root", "neck" ],
       "axis": [ 0, 0, -1 ],
       "anchor": [ 0.0675, 0.0, 0.0195 ],
-      "angle_range": [ -90, 90 ]
+      "angle_range": [ -90, 90 ],
+      "torque": 0.10,
+      "pid": [ 8, 2, 4 ]
     },
     "tilt2": {
       "connect": [ "neck", "head" ],
       "axis": [ 0, 1, 0 ],
       "anchor": [ 0.0675, 0.0, 0.0995 ],
-      "angle_range": [ -15, 45 ]
+      "angle_range": [ -15, 45 ],
+      "torque": 0.20,
+      "pid": [ 8, 4, 2 ]
     },
     "chin": {
       "connect": [ "head", "chops" ],
       "axis": [ 0, 1, 0 ],
       "anchor": [ 0.1075, 0, 0.0820 ],
-      "angle_range": [ -55, 3 ]
+      "angle_range": [ -55, 3 ],
+      "torque": 0.01,
+      "pid": [ 8, 0, 4 ]
     },
     "rf1": {
       "connect": [ "body", "rf1" ],
       "axis": [ 0, 1, 0 ],
       "anchor": [ 0.0650, -0.0625, 0.0 ],
-      "angle_range": [ -115, 130 ]
+      "angle_range": [ -115, 130 ],
+      "torque": 0.06,
+      "pid": [ 28, 8, 1 ]
     },
     "rf2": {
       "connect": [ "rf1", "rf2" ],
       "axis": [ 1, 0, 0 ],
       "anchor": [ 0.0650, -0.0625, 0.0 ],
-      "angle_range": [ -15, 93 ]
+      "angle_range": [ -15, 93 ],
+      "torque": 0.03,
+      "pid": [ 20, 4, 1 ]
     },
     "rf3": {
       "connect": [ "rf2", "rf3" ],
       "axis": [ 0, 1, 0 ],
       "anchor": [ 0.0728, -0.06725, -0.0695 ],
-      "angle_range": [ -25, 122 ]
+      "angle_range": [ -25, 122 ],
+      "torque": 0.04,
+      "pid": [ 28, 8, 1 ]
     },
     "lf1": {
       "connect": [ "body", "lf1" ],
       "axis": [ 0, 1, 0 ],
       "anchor": [ 0.0650, 0.0625, 0.0 ],
-      "angle_range": [ -115, 130 ]
+      "angle_range": [ -115, 130 ],
+      "torque": 0.06,
+      "pid": [ 28, 8, 1 ]
     },
     "lf2": {
       "connect": [ "lf1", "lf2" ],
       "axis": [ -1, 0, 0 ],
       "anchor": [ 0.0650, 0.0625, 0.0 ],
-      "angle_range": [ -15, 93 ]
+      "angle_range": [ -15, 93 ],
+      "torque": 0.03,
+      "pid": [ 20, 4, 1 ]
     },
     "lf3": {
       "connect": [ "lf2", "lf3" ],
       "axis": [ 0, 1, 0 ],
       "anchor": [ 0.0728, 0.06725, -0.0695 ],
-      "angle_range": [ -25, 122 ]
+      "angle_range": [ -25, 122 ],
+      "torque": 0.04,
+      "pid": [ 28, 8, 1 ]
     },
     "rh1": {
       "connect": [ "body", "rh1" ],
       "axis": [ 0, -1, 0 ],
       "anchor": [ -0.0650, -0.0625, 0.0 ],
-      "angle_range": [ -135, 120 ]
+      "angle_range": [ -135, 120 ],
+      "torque": 0.06,
+      "pid": [ 28, 8, 1 ]
     },
     "rh2": {
       "connect": [ "rh1", "rh2" ],
       "axis": [ 1, 0, 0 ],
       "anchor": [ -0.0650, -0.0625, 0.0 ],
-      "angle_range": [ -15, 93 ]
+      "angle_range": [ -15, 93 ],
+      "torque": 0.03,
+      "pid": [ 20, 4, 1 ]
     },
     "rh3": {
       "connect": [ "rh2", "rh3" ],
       "axis": [ 0, -1, 0 ],
       "anchor": [ -0.0728, -0.06725, -0.0695 ],
-      "angle_range": [ -25, 122 ]
+      "angle_range": [ -25, 122 ],
+      "torque": 0.04,
+      "pid": [ 28, 8, 1 ]
     },
     "lh1": {
       "connect": [ "body", "lh1" ],
       "axis": [ 0, -1, 0 ],
       "anchor": [ -0.0650, 0.0625, 0.0 ],
-      "angle_range": [ -135, 120 ]
+      "angle_range": [ -135, 120 ],
+      "torque": 0.06,
+      "pid": [ 28, 8, 1 ]
     },
     "lh2": {
       "connect": [ "lh1", "lh2" ],
       "axis": [ -1, 0, 0 ],
       "anchor": [ -0.0650, 0.0625, 0.0 ],
-      "angle_range": [ -15, 93 ]
+      "angle_range": [ -15, 93 ],
+      "torque": 0.03,
+      "pid": [ 20, 4, 1 ]
     },
     "lh3": {
       "connect": [ "lh2", "lh3" ],
       "axis": [ 0, -1, 0 ],
       "anchor": [ -0.0728, 0.06725, -0.0695 ],
-      "angle_range": [ -25, 122 ]
+      "angle_range": [ -25, 122 ],
+      "torque": 0.04,
+      "pid": [ 28, 8, 1 ]
     }
   }
 }

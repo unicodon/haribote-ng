@@ -120,6 +120,67 @@ void drawAxes(const Camera& camera, const Matrix& transform)
 	}
 }
 
+void drawPlaneWireframe(const Camera& camera, const Matrix& transform, const float* color)
+{
+	auto prog = wireframeProgram();
+	glUseProgram(prog);
+
+	static GLint aPos = glGetAttribLocation(prog, "aPos");
+	static GLint uProjection = glGetUniformLocation(prog, "uProjection");
+	static GLint uView = glGetUniformLocation(prog, "uView");
+	static GLint uModel = glGetUniformLocation(prog, "uModel");
+	static GLint uColor = glGetUniformLocation(prog, "uColor");
+
+	glUniformMatrix4fv(uProjection, 1, GL_FALSE, camera.projection().data());
+	glUniformMatrix4fv(uView, 1, GL_FALSE, camera.view().data());
+	glUniformMatrix4fv(uModel, 1, GL_FALSE, transform.data());
+
+	GLfloat white[4] = { 1, 1, 1, 1 };
+	glUniform4fv(uColor, 1, color ? color : white);
+
+	glDisable(GL_DEPTH_TEST);
+
+	glEnableVertexAttribArray(aPos);
+
+	const int NDIV = 16;
+	GLfloat vertex[NDIV * 8 * 3];
+	for (int i = 0; i < NDIV; i++) {
+		auto ptr = &vertex[i * 8 * 3];
+		
+		GLfloat x = 1.0 * (i + 1) / NDIV;
+		*(ptr++) = x;
+		*(ptr++) = 1.0;
+		*(ptr++) = 0.0;
+		*(ptr++) = x;
+		*(ptr++) = -1.0;
+		*(ptr++) = 0.0;
+
+		*(ptr++) = -x;
+		*(ptr++) = 1.0;
+		*(ptr++) = 0.0;
+		*(ptr++) = -x;
+		*(ptr++) = -1.0;
+		*(ptr++) = 0.0;
+
+		*(ptr++) = 1.0;
+		*(ptr++) = x;
+		*(ptr++) = 0.0;
+		*(ptr++) = -1.0;
+		*(ptr++) = x;
+		*(ptr++) = 0.0;
+
+		*(ptr++) = 1.0;
+		*(ptr++) = -x;
+		*(ptr++) = 0.0;
+		*(ptr++) = -1.0;
+		*(ptr++) = -x;
+		*(ptr++) = 0.0;
+	}
+	glVertexAttribPointer(aPos, 3, GL_FLOAT, GL_FALSE, 0, vertex);
+	glDrawArrays(GL_LINES, 0, NDIV * 8);
+}
+
+
 void drawBoxWireframe(const Camera& camera, const Matrix& transform, const float* color)
 {
 	auto prog = wireframeProgram();

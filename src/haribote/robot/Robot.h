@@ -27,14 +27,25 @@ public:
 	public:
 		Joint(dWorldID world, dBody& body0, dBody& body1, Value::Object& desc, const Matrix& transform);
 
+		void update(dReal interval);
+
 		void draw(unsigned drawFlags, const Camera& camera, const LightInfo& lights);
+
+		void debug();
 
 	private:
 		dHingeJoint m_joint;
+		Vector m_pid;
+		float m_torque{ 0.0f };
+		float m_targetAngle{ 0.0f };
+		float m_lastAngle{ 0.0f };
+		float m_integralAngle{ 0.0f };
 	};
 	using JointPtr = std::unique_ptr<Joint>;
 
 	void load(dWorldID world, dSpaceID space, const Matrix& transform);
+
+	void update(dReal interval);
 
 	void draw(unsigned drawFlags, const Camera& camera, const LightInfo& lights);
 
